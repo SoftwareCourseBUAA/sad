@@ -26,5 +26,86 @@
     </div>
 </nav>
 </div>
+					<div class="modal-body" style="margin-left:25%">
+							<div class="col-md-6" style="margin:opx auto">
+                            	<br>
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="username" class="col-sm-2 control-label">昵称：</label>
+                                    <div class="col-sm-10">
+                                    <input class="form-control required" type="text" placeholder="Nickname" id="username" name="username" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="form-group">
+                                	<i class="fa fa-user fa-lg"></i>
+                                    <label for="password" class="col-sm-2 control-label">密码：</label>
+                                    <div class="col-sm-10">
+                                    <input class="form-control required" type="password" placeholder="Password" id="password" name="password" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="form-group">
+                                	<i class="fa fa-user fa-lg"></i>
+                                    <label for="repassword" class="col-sm-2 control-label">确认密码：</label>
+                                    <div class="col-sm-10">
+                                    <input class="form-control required" type="password" placeholder="Confirm Password" id="repassword" name="repassword" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <div class="form-group col-md-offset-10">
+                                    <button id='btn' type="submit" class="btn btn-primary" name="submit" onclick="doPost()">确认注册</button>
+                                </div>
+                            </div>
+					</div>
 </body>
+    <script type='text/javascript'>
+    	//var btn = document.getElementById('btn');
+        //    btn.addEventListener('mouseclick',do)
+		function doPost()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var val3 = document.getElementById("repassword").value;
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			if(val1=="")
+			{
+				alert("昵称不能为空！");
+			}
+			else if(val2=="")
+			{
+				alert("密码不能为空！");
+			}
+			else if(val2!=val3)
+			{
+				alert("两次输入密码不相同！");
+			}
+			else
+			{
+				$.post("http://85138fe9.ngrok.io/users",{nickname:val1,password:val2},function(bool)
+				{
+					alert(bool);
+					if(bool==false)
+					{
+						alert("该昵称已被注册！");
+					}
+					else
+					{
+						alert("注册成功！");
+						window.location.href='2.html';
+						//var cookie="userId="+data;
+						//alert("sss");
+						//document.cookie = cookie;
+					}
+				});	
+			}
+		}
+    </script>
 </html>
