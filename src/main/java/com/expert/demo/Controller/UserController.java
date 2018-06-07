@@ -1,6 +1,8 @@
 package com.expert.demo.Controller;
 
+import com.expert.demo.AssitClass.CustomizedUser;
 import com.expert.demo.Entity.User;
+import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,9 @@ public class UserController
 {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExpertRepository expertRepository;
 
     //用户注册函数
     @PostMapping(value = "/users")
@@ -48,17 +53,31 @@ public class UserController
 
     //用户信息展示函数
     @GetMapping(value = "/userInformation")
-    public User getUserInformation(@RequestParam("userId") int userId)
+    public CustomizedUser getUserInformation(@RequestParam("userId") int userId)
     {
-        User user1=userRepository.findByUserId(userId);
-        if( user1!=null)
-            user1.setPassword("");
+        User user=userRepository.findByUserId(userId);
+        CustomizedUser exUser=new CustomizedUser();
+        if( user!=null)
+        {
+            user.setPassword("");
+            exUser.setUser(user);
+            if( expertRepository.getNumberOfExpertByUser(user)>0 )
+            {
+                exUser.setIdentity(2);
+            }
+            else
+            {
+                exUser.setIdentity(1);
+            }
+        }
         else
         {
-            user1=new User();
+            User user1=new User();
             user1.setUserId(userId);
+            exUser.setUser(user1);
+            exUser.setIdentity(1);
         }
-        return user1;
+        return exUser;
     }
 
     //修改用户信息的函数,能修改email，name，nickname和password

@@ -37,6 +37,14 @@ public class AchievementController
             {
                 return false;
             }
+            if(exAchievement.getAchievementName()!=null )
+            {
+                achievement.setAchievementName(exAchievement.getAchievementName());
+            }
+            else
+            {
+                return false;
+            }
             if( exAchievement.getPoint()!=null )
             {
                 achievement.setPoint(exAchievement.getPoint());
@@ -61,6 +69,7 @@ public class AchievementController
             return false;
         }
     }
+
 
     @GetMapping(value = "/achievement/expert/{expertId}")
     public List<Achievement> getAchievementByExpert( @PathVariable("expertId") int expertId)
