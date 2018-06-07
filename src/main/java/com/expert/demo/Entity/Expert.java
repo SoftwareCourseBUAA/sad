@@ -17,6 +17,11 @@ public class Expert
     @Column(columnDefinition = "TEXT")
     private String field;
 
+    //专家是否认证
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean isAuthenticated;
+
     //专家所属机构
     private String institution;
 
