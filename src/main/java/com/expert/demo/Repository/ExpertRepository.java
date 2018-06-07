@@ -11,7 +11,7 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
 {
         public Expert getByExpertId(int expertId);
 
-        
+        public Expert getByUser(User user);
 
         @Query("select COUNT(u) from Expert u where u.user=?1")
         public int getNumberOfExpertByUser(User user);
