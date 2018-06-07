@@ -5,6 +5,10 @@ import com.expert.demo.Entity.Expert;
 public class ExExpert
 {
 
+    public ExExpert(){
+
+    }
+
     public ExExpert(Expert e) {
         this.expertId=(e.getExpertId());
         this.patent=(e.getPatent());

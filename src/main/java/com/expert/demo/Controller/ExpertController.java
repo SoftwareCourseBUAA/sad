@@ -23,15 +23,16 @@ public class ExpertController
     {
         User user = userRepository.findByUserId(userId);
         Expert expert=expertRepository.getByUser(user);
-        ExExpert result = new ExExpert(expert);
-        if(expert!=null)
-        {
-            if(user.getName()!=null)
-                result.setName(user.getName());
-            if(user.getName()==null)
-                result.setName(user.getNickname());
-        }
-        else {
+        ExExpert result = new ExExpert();
+        if(expert!=null) {
+            result = new ExExpert(expert);
+            if (expert != null) {
+                if (user.getName() != null)
+                    result.setName(user.getName());
+                if (user.getName() == null)
+                    result.setName(user.getNickname());
+            }
+        }else {
             result.setIntroducation("查无此人");
         }
         return result;
@@ -64,6 +65,7 @@ public class ExpertController
             expert1=new Expert();
             expert1.setIntroducation("查无此人");
         }
+        expert1.getUser().setPassword("");
         return expert1;
     }
 
