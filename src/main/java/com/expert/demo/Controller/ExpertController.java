@@ -19,17 +19,22 @@ public class ExpertController
     private UserRepository userRepository;
 
     @GetMapping(value="/expert/{userId}")
-    public Expert getExpertInfo(@PathVariable("userId") int userId)
+    public ExExpert getExpertInfo(@PathVariable("userId") int userId)
     {
         User user = userRepository.findByUserId(userId);
         Expert expert=expertRepository.getByUser(user);
+        ExExpert result = new ExExpert(expert);
         if(expert!=null)
-        return expert;
-        else {
-            expert = new Expert();
-            expert.setIntroducation("查无此人");
-            return expert;
+        {
+            if(user.getName()!=null)
+                result.setName(user.getName());
+            if(user.getName()==null)
+                result.setName(user.getNickname());
         }
+        else {
+            result.setIntroducation("查无此人");
+        }
+        return result;
     }
 
     @PutMapping(value="/expert/{userid}")
@@ -72,13 +77,19 @@ public class ExpertController
         if( user!=null && expert2==null)
         {
             expert1.setUser(user);
-            expert1.setExpertId(exExpert.getExpertId());
+            if(exExpert.getField()!=null)
             expert1.setField(exExpert.getField());
+            if(exExpert.getIntroducation()!=null)
             expert1.setIntroducation(exExpert.getIntroducation());
+            if(exExpert.getInstitution()!=null)
             expert1.setInstitution(exExpert.getInstitution());
+            if(exExpert.getOtherAchievement()!=null)
             expert1.setOtherAchievement(exExpert.getOtherAchievement());
+            if(exExpert.getPaper()!=null)
             expert1.setPaper(exExpert.getPaper());
+            if(exExpert.getProject()!=null)
             expert1.setProject(exExpert.getProject());
+            if(exExpert.getPatent()!=null)
             expert1.setPatent(exExpert.getPatent());
             expertRepository.save(expert1);
             return true;
