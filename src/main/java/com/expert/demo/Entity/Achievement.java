@@ -10,6 +10,9 @@ public class Achievement
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer achievementId;
 
+    //成果的命名
+    private String achievementName;
+
     //成果的简介
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "TEXT")
@@ -75,5 +78,13 @@ public class Achievement
 
     public void setExpert(Expert expert) {
         this.expert = expert;
+    }
+
+    public String getAchievementName() {
+        return achievementName;
+    }
+
+    public void setAchievementName(String achievementName) {
+        this.achievementName = achievementName;
     }
 }

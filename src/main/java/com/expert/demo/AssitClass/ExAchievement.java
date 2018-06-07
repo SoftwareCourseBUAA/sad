@@ -4,7 +4,11 @@ public class ExAchievement
 {
     private Integer achievementId;
 
+    //成果介绍
     private String introduction;
+
+    //成果命名
+    private String achievementName;
 
     //交易类型，分为积分交易，设置为1 和联系专家，设置为2 两种
     private Integer type;
@@ -65,5 +69,13 @@ public class ExAchievement
 
     public void setExpertId(Integer expertId) {
         this.expertId = expertId;
+    }
+
+    public String getAchievementName() {
+        return achievementName;
+    }
+
+    public void setAchievementName(String achievementName) {
+        this.achievementName = achievementName;
     }
 }
