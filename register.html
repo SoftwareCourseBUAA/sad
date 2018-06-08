@@ -73,6 +73,39 @@
 			var val1 = document.getElementById("username").value;
             var val2 = document.getElementById("password").value;
             var val3 = document.getElementById("repassword").value;
+			var user = {
+        	"nickname":val1,
+        	"password":val2
+        	}
+			user = JSON.stringify(user);
+        	var settings = {
+			        type: "POST",
+			        url:"https://c94d22f1.ngrok.io/users",
+			        data:user,
+			        error: function(XHR,textStatus,errorThrown) {
+			            alert("error!");
+			        },
+			        success: function(data,textStatus) {
+			            alert(data);
+						if(data==false)
+						{
+							alert("该昵称已被注册！");
+						}
+						else
+						{
+							alert("注册成功！");
+							window.location.href='login.html';
+							//var cookie="userId="+data;
+							//alert("sss");
+							//document.cookie = cookie;
+						}
+			        },
+			        headers: {
+			            "Content-Type":"application/json"
+			        }
+			        
+			};
+			//var btn = document.getElementById('btn');
             //btn.addEventListener('mouseclick')
             //http://localhost:8080/login.html
 			if(val1=="")
@@ -89,22 +122,7 @@
 			}
 			else
 			{
-				$.post("http://85138fe9.ngrok.io/users",{nickname:val1,password:val2},function(bool)
-				{
-					alert(bool);
-					if(bool==false)
-					{
-						alert("该昵称已被注册！");
-					}
-					else
-					{
-						alert("注册成功！");
-						window.location.href='2.html';
-						//var cookie="userId="+data;
-						//alert("sss");
-						//document.cookie = cookie;
-					}
-				});	
+				 $.ajax(settings);
 			}
 		}
     </script>
