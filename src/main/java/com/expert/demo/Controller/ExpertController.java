@@ -18,30 +18,49 @@ public class ExpertController
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(value="/expert/{userId}")
-    public ExExpert getExpertInfo(@PathVariable("userId") int userId)
+    @GetMapping(value="/expert/name/{name}")
+    public Expert getExpertInfoByName(@PathVariable("name") String name)
     {
-        User user = userRepository.findByUserId(userId);
-        Expert expert=expertRepository.getByUser(user);
-        ExExpert result = new ExExpert();
-        if(expert!=null) {
-            result = new ExExpert(expert);
-            if (expert != null) {
-                if (user.getName() != null)
-                    result.setName(user.getName());
-                if (user.getName() == null)
-                    result.setName(user.getNickname());
-            }
-        }else {
-            result.setIntroducation("查无此人");
+        Expert expert=expertRepository.getByName(name);
+        if(expert==null) {
+            expert=new Expert();
+            expert.setIntroducation("查无此人");
         }
-        return result;
+        return expert;
+    }
+
+    @GetMapping(value="/expert/id/{userid}")
+    public Expert getExpertInfoByUserId(@PathVariable("userid") int userid)
+    {
+        User user = userRepository.findByUserId(userid);
+        Expert expert =new Expert();
+        if(user!=null)
+        {
+            expert = expertRepository.getByUser(user);
+            if(expert!=null)
+            {
+                return expert;
+            }
+            else{
+                expert.setIntroducation("这个用户不对应任何专家");
+            }
+        }
+        else{
+            expert.setIntroducation("没有这个用户的信息");
+        }
+        return expert;
     }
 
     @PutMapping(value="/expert/{userid}")
-    public Expert changeExpertInfo(@RequestBody ExExpert expert,@PathVariable("userid") int userid)
+    public Expert changeExpertInfo(@RequestBody Expert expert,@PathVariable("userid") int userid)
     {
         User user = userRepository.findByUserId(userid);
+        if(user==null)
+        {
+            Expert e = new Expert();
+            e.setIntroducation("没有这个用户");
+            return e;
+        }
         Expert expert1=expertRepository.getByUser(user);
         if(expert1!=null)
         {
@@ -59,7 +78,13 @@ public class ExpertController
                 expert1.setPatent(expert.getPatent());
             if(expert.getProject()!=null)
                 expert1.setProject(expert.getProject());
+            if(expert.getName()!=null)
+            {
+                expert1.setName(expert.getName());
+                user.setName(expert.getName());
+            }
             expertRepository.save(expert1);
+            userRepository.save(user);
         }
         else{
             expert1=new Expert();
@@ -71,35 +96,37 @@ public class ExpertController
 
 
     @PostMapping(value = "/expert")
-    public Boolean addExpert(@RequestBody ExExpert exExpert)
+    public Expert addExpert(@RequestBody Expert expert)
     {
         Expert expert1=new Expert();
-        User user=userRepository.findByUserId(exExpert.getUserId());
-        Expert expert2 = expertRepository.getByUser(user);
-        if( user!=null && expert2==null)
+        if(expert!=null && expert.getName()!=null&&expertRepository.getByName(expert.getName())==null)
         {
-            expert1.setUser(user);
-            if(exExpert.getField()!=null)
-            expert1.setField(exExpert.getField());
-            if(exExpert.getIntroducation()!=null)
-            expert1.setIntroducation(exExpert.getIntroducation());
-            if(exExpert.getInstitution()!=null)
-            expert1.setInstitution(exExpert.getInstitution());
-            if(exExpert.getOtherAchievement()!=null)
-            expert1.setOtherAchievement(exExpert.getOtherAchievement());
-            if(exExpert.getPaper()!=null)
-            expert1.setPaper(exExpert.getPaper());
-            if(exExpert.getProject()!=null)
-            expert1.setProject(exExpert.getProject());
-            if(exExpert.getPatent()!=null)
-            expert1.setPatent(exExpert.getPatent());
+            expert1.setName(expert.getName());
+            if(expert.getField()!=null)
+            expert1.setField(expert.getField());
+            if(expert.getIntroducation()!=null)
+            expert1.setIntroducation(expert.getIntroducation());
+            if(expert.getInstitution()!=null)
+            expert1.setInstitution(expert.getInstitution());
+            if(expert.getOtherAchievement()!=null)
+            expert1.setOtherAchievement(expert.getOtherAchievement());
+            if(expert.getPaper()!=null)
+            expert1.setPaper(expert.getPaper());
+            if(expert.getProject()!=null)
+            expert1.setProject(expert.getProject());
+            if(expert.getPatent()!=null)
+            expert1.setPatent(expert.getPatent());
             expertRepository.save(expert1);
-            return true;
+            return expert1;
         }
-        else
+        else if(expert!=null && expert.getName()!=null && expertRepository.getByName(expert.getName())!=null)
         {
-            return false;
+            expert1.setIntroducation("无法添加重名专家");
+            return expert1;
         }
-
+        else{
+            expert1.setIntroducation("关键信息缺失，无法添加专家");
+            return expert1;
+        }
     }
 }

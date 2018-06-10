@@ -19,6 +19,7 @@ public class ExExpert
         this.otherAchievement=(e.getOtherAchievement());
         this.field=(e.getField());
         this.userId=e.getUser().getUserId();
+        this.name = e.getName();
     }
 
     private Integer expertId;
