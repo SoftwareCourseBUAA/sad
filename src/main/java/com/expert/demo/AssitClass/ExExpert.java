@@ -1,7 +1,27 @@
 package com.expert.demo.AssitClass;
 
+import com.expert.demo.Entity.Expert;
+
 public class ExExpert
 {
+
+    public ExExpert(){
+
+    }
+
+    public ExExpert(Expert e) {
+        this.expertId=(e.getExpertId());
+        this.patent=(e.getPatent());
+        this.project=(e.getProject());
+        this.paper=(e.getPaper());
+        this.institution=(e.getInstitution());
+        this.introducation=(e.getIntroducation());
+        this.otherAchievement=(e.getOtherAchievement());
+        this.field=(e.getField());
+        this.userId=e.getUser().getUserId();
+        this.name = e.getName();
+    }
+
     private Integer expertId;
 
     //专家专业领域
@@ -15,6 +35,18 @@ public class ExExpert
 
     //专家科研论文
     private String paper;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    //专家名字
+    private String name;
 
     //专家授权专利
     private String patent;

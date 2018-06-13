@@ -10,10 +10,28 @@ public class Expert
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer expertId;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //专家姓名
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "TEXT")
+    private String name;
+
     //专家专业领域
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "TEXT")
     private String field;
+
+    //专家是否认证
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "BOOLEAN")
+    private Boolean isAuthenticated;
 
     //专家所属机构
     private String institution;
