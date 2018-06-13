@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@RestController
+@CrossOrigin
 public class TradingController
 {
     @Autowired
@@ -71,6 +72,7 @@ public class TradingController
         int achievementId=exTrading.getAchievementId();
         User user=userRepository.findByUserId(userId);
         Achievement achievement=achievementRepository.getOne(achievementId);
+        User expert=achievement.getExpert().getUser();
         if( user!=null&&achievement!=null )
         {
             if(user.getPoint()>=point&&achievement.getPoint()==point )
@@ -78,6 +80,8 @@ public class TradingController
                 int currentPoint=user.getPoint();
                 user.setPoint(currentPoint-point);
                 userRepository.save(user);
+                expert.setPoint(expert.getPoint()+point);
+                userRepository.save(expert);
                 Trading trading=new Trading();
                 trading.setUser(user);
                 trading.setAchievement(achievement);
@@ -107,7 +111,7 @@ public class TradingController
     public Boolean getExistenceOfTrading( @RequestParam("userId") int userId, @RequestParam("achievementId") int achievementId )
     {
         User user=userRepository.findByUserId(userId);
-        Achievement achievement=achievementRepository.getOne(achievementId);
+        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
         if(user!=null&& achievement!=null)
             return tradingRepository.getByUserAndAchievement(user,achievement)!=null;
         else
@@ -119,10 +123,16 @@ public class TradingController
     public List<Trading> getTradingsByUser(@PathVariable("userId") int userId )
     {
         List<Trading> tradingList=new ArrayList<>();
-        User user=userRepository.getOne(userId);
+        User user=userRepository.findByUserId(userId);
         if( user!=null )
         {
             tradingList=tradingRepository.findTradingsByUser(user);
+            for( int i=0;i<tradingList.size();i++ )
+            {
+                tradingList.get(i).getAchievement().setDownloadUrl("");
+                tradingList.get(i).getAchievement().getExpert().getUser().setPassword("");
+                tradingList.get(i).getUser().setPassword("");
+            }
             return tradingList;
         }
         else
@@ -136,7 +146,7 @@ public class TradingController
     public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId )
     {
         List<Trading> tradingList=new ArrayList<>();
-        Achievement achievement=achievementRepository.getOne(achievementId);
+        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
         if( achievement!=null )
         {
             tradingList=tradingRepository.findTradingsByAchievement(achievement);
@@ -152,9 +162,10 @@ public class TradingController
     @GetMapping(value = "/achievement/{achievementId}")
     public Achievement getInformationByAchievementId(@PathVariable("achievementId") int achievementId )
     {
-        Achievement achievement=achievementRepository.getOne(achievementId);
+        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
         if( achievement!=null )
         {
+            achievement.getExpert().getUser().setPassword("");
             return  achievement;
         }
         else
@@ -169,8 +180,8 @@ public class TradingController
     @GetMapping(value = "/trading/download")
     public String getDownloadUrl(@RequestParam("userId") int userId, @RequestParam("achievementId") int achievementId)
     {
-        User user=userRepository.getOne(userId);
-        Achievement achievement=achievementRepository.getOne(achievementId);
+        User user=userRepository.findByUserId(userId);
+        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
         if( user!=null&&achievement!=null )
         {
             if( achievement.getPoint()==0 )

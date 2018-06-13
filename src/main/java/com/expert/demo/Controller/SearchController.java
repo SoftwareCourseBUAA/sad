@@ -33,7 +33,7 @@ public class SearchController
     private UserRepository userRepository;
 
     //查找相似专家姓名的专家信息
-    @GetMapping(value = "/search/expert")
+    @GetMapping(value = "/search/expert/name")
     public List<CustomizedExpert> getExpertsByName(@RequestParam("name") String name)
     {
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
@@ -53,7 +53,7 @@ public class SearchController
     }
 
     //查找相似领域的专家信息
-    @GetMapping(value = "/search/expert")
+    @GetMapping(value = "/search/expert/field")
     public List<CustomizedExpert> getExpertsByField(@RequestParam("field") String field)
     {
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
@@ -69,7 +69,7 @@ public class SearchController
     }
 
     //查找相似项目的专家信息
-    @GetMapping(value = "/search/expert")
+    @GetMapping(value = "/search/expert/project")
     public List<CustomizedExpert> getExpertsByProject(@RequestParam("project") String project)
     {
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
@@ -85,7 +85,7 @@ public class SearchController
     }
 
     //查找相似机构的专家信息
-    @GetMapping(value = "/search/expert")
+    @GetMapping(value = "/search/expert/institution")
     public List<CustomizedExpert> getExpertsByInstitution(@RequestParam("institution") String institution)
     {
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();

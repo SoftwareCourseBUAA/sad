@@ -1,7 +1,5 @@
 package com.expert.demo.Entity;
 
-import org.hibernate.annotations.GeneratorType;
-
 import javax.persistence.*;
 
 //专家类
@@ -44,6 +42,9 @@ public class Expert
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "TEXT")
     private String introducation;
+
+    //专家对于自己门户的管理权
+    private Boolean isAuthenticated;
 
 
     @OneToOne
@@ -121,5 +122,13 @@ public class Expert
 
     public void setIntroducation(String introducation) {
         this.introducation = introducation;
+    }
+
+    public Boolean getIsAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public void setIsAuthenticated(Boolean isAuthenticated) {
+        this.isAuthenticated = isAuthenticated;
     }
 }

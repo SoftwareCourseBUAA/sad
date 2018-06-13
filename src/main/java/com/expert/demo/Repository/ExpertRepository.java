@@ -21,4 +21,6 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
         public List<Expert> findExpertsByProjectLike(String project);
 
         public List<Expert> findExpertsByInstitutionLike(String institution);
+
+        public Expert findExpertByUser(User user);
 }

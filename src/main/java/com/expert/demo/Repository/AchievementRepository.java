@@ -12,4 +12,6 @@ public interface AchievementRepository extends JpaRepository<Achievement,Integer
 
     public List<Achievement> getAchievementsByAchievementNameLike(String name);
 
+    public Achievement getAchievementByAchievementId( int achievementId);
+
 }
