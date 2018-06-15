@@ -27,9 +27,11 @@ public class Achievement
     //专家资源下载链接
     private String downloadUrl;
 
+    private Integer downloadNumber;
+
     //成果所属专家
     @ManyToOne
-    @JoinColumn(name="expert_id")
+    @JoinColumn(name="expert_id",foreignKey = @ForeignKey(name = "ACHIEVEMENT_EXPERT_ID_FK"))
     private Expert expert;
 
     public Integer getAchievementId() {
@@ -86,5 +88,13 @@ public class Achievement
 
     public void setAchievementName(String achievementName) {
         this.achievementName = achievementName;
+    }
+
+    public Integer getDownloadNumber() {
+        return downloadNumber;
+    }
+
+    public void setDownloadNumber(Integer downloadNumber) {
+        this.downloadNumber = downloadNumber;
     }
 }

@@ -2,9 +2,11 @@ package com.expert.demo.Controller;
 
 import com.expert.demo.AssitClass.ExTrading;
 import com.expert.demo.Entity.Achievement;
+import com.expert.demo.Entity.Expert;
 import com.expert.demo.Entity.Trading;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.AchievementRepository;
+import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.TradingRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class TradingController
 
     @Autowired
     private AchievementRepository achievementRepository;
+
+    @Autowired
+    private ExpertRepository expertRepository;
 
 
     private int getPointByUserId( int userId )
@@ -71,8 +76,9 @@ public class TradingController
         int point=exTrading.getPoint();
         int achievementId=exTrading.getAchievementId();
         User user=userRepository.findByUserId(userId);
-        Achievement achievement=achievementRepository.getOne(achievementId);
-        User expert=achievement.getExpert().getUser();
+        Achievement achievement=achievementRepository.findAchievementByAchievementId(achievementId);
+        User user1=achievement.getExpert().getUser();
+        Expert expert=achievement.getExpert();
         if( user!=null&&achievement!=null )
         {
             if(user.getPoint()>=point&&achievement.getPoint()==point )
@@ -80,8 +86,12 @@ public class TradingController
                 int currentPoint=user.getPoint();
                 user.setPoint(currentPoint-point);
                 userRepository.save(user);
-                expert.setPoint(expert.getPoint()+point);
-                userRepository.save(expert);
+                user1.setPoint(user1.getPoint()+point);
+                userRepository.save(user1);
+                achievement.setDownloadNumber(achievement.getDownloadNumber()+1);
+                achievementRepository.save(achievement);
+                expert.setTradingNumber(expert.getTradingNumber()+1);
+                expertRepository.save(expert);
                 Trading trading=new Trading();
                 trading.setUser(user);
                 trading.setAchievement(achievement);

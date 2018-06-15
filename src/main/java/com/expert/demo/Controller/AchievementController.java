@@ -19,11 +19,14 @@ import java.util.List;
 @RestController
 public class AchievementController
 {
-    @Autowired
-    ExpertRepository expertRepository;
 
     @Autowired
     AchievementRepository achievementRepository;
+
+    @Autowired
+    ExpertRepository expertRepository;
+
+
 
     @PostMapping(value = "/achievement")
     public Boolean addAchievement(@RequestBody ExAchievement exAchievement)

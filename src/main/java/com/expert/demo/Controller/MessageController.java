@@ -166,7 +166,7 @@ public class MessageController
                 Expert expert=expertRepository.findExpertByUser(sender);
                 if( expert!=null )
                 {
-                    if( expert.getIsAuthenticated()==true )
+                    if( expert.getAuthenticated()==true )
                         return false;
                     else
                     {

@@ -116,6 +116,7 @@ public class ExpertController
             expert1.setProject(expert.getProject());
             if(expert.getPatent()!=null)
             expert1.setPatent(expert.getPatent());
+            expert1.setTradingNumber(0);
             expertRepository.save(expert1);
             return expert1;
         }

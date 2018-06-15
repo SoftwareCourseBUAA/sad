@@ -10,7 +10,7 @@ public interface AchievementRepository extends JpaRepository<Achievement,Integer
 {
     public List<Achievement> getAchievementsByExpert(Expert expert);
 
-    public List<Achievement> getAchievementsByAchievementNameLike(String name);
+    public List<Achievement> getAchievementsByAchievementNameContaining(String name);
 
     public Achievement getAchievementByAchievementId( int achievementId);
 

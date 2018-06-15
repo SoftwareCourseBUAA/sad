@@ -10,11 +10,11 @@ public class Trading
     private Integer tradingId;
 
     @ManyToOne
-    @JoinColumn(name="achievemnet_id")
+    @JoinColumn(name="achievemnet_id",foreignKey = @ForeignKey(name = "TRADING_ACHIEVEMENT_ID_FK"))
     private Achievement achievement;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id",foreignKey = @ForeignKey(name = "TRADING_USER_ID_FK"))
     private User user;
 
     public Integer getTradingId() {

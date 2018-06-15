@@ -8,6 +8,7 @@ import com.expert.demo.Entity.Expert;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.AchievementRepository;
 import com.expert.demo.Repository.ExpertRepository;
+import com.expert.demo.Repository.PaperRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,6 +33,9 @@ public class SearchController
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PaperRepository paperRepository;
+
     //查找相似专家姓名的专家信息
     @GetMapping(value = "/search/expert/name")
     public List<CustomizedExpert> getExpertsByName(@RequestParam("name") String name)
@@ -39,13 +43,14 @@ public class SearchController
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
         if( name!=""&&name!=null )
         {
-            List<User> userList = userRepository.findUsersByNameLike(name);
+            List<User> userList = userRepository.findUsersByNameContaining(name);
+            System.out.println(userList.size());
             for (int i = 0; i < userList.size(); i++)
             {
                 List<Expert> expertList = expertRepository.findExpertsByUser(userList.get(i));
                 for (int j = 0; j < expertList.size(); j++)
                 {
-                    customizedExpertList.add(new CustomizedExpert(expertList.get(j)));
+                    customizedExpertList.add(new CustomizedExpert(expertList.get(j),paperRepository));
                 }
             }
         }
@@ -59,10 +64,10 @@ public class SearchController
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
         if( field!=null&&field!="")
         {
-            List<Expert> expertList = expertRepository.findExpertsByFieldLike(field);
+            List<Expert> expertList = expertRepository.findExpertsByFieldContaining(field);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i)));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
             }
         }
         return customizedExpertList;
@@ -75,10 +80,10 @@ public class SearchController
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
         if( project!=null&&project!="")
         {
-            List<Expert> expertList = expertRepository.findExpertsByProjectLike(project);
+            List<Expert> expertList = expertRepository.findExpertsByProjectContaining(project);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i)));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
             }
         }
         return customizedExpertList;
@@ -91,10 +96,10 @@ public class SearchController
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
         if( institution!=null&&institution!="")
         {
-            List<Expert> expertList = expertRepository.findExpertsByInstitutionLike(institution);
+            List<Expert> expertList = expertRepository.findExpertsByInstitutionContaining(institution);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i)));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
             }
         }
         return customizedExpertList;
@@ -107,7 +112,7 @@ public class SearchController
         List<CustomizedAchievement> customizedAchievementList=new ArrayList<>();
         if( name!=null&&name!="" )
         {
-            List<Achievement> achievementList=achievementRepository.getAchievementsByAchievementNameLike(name);
+            List<Achievement> achievementList=achievementRepository.getAchievementsByAchievementNameContaining(name);
             for( int i=0;i<achievementList.size();i++ )
             {
                 customizedAchievementList.add(new CustomizedAchievement(achievementList.get(i)));
