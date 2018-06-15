@@ -5,11 +5,9 @@ import com.expert.demo.AssitClass.CustomizedAchievement;
 import com.expert.demo.AssitClass.CustomizedExpert;
 import com.expert.demo.Entity.Achievement;
 import com.expert.demo.Entity.Expert;
+import com.expert.demo.Entity.ExpertAndPaper;
 import com.expert.demo.Entity.User;
-import com.expert.demo.Repository.AchievementRepository;
-import com.expert.demo.Repository.ExpertRepository;
-import com.expert.demo.Repository.PaperRepository;
-import com.expert.demo.Repository.UserRepository;
+import com.expert.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +32,7 @@ public class SearchController
     private UserRepository userRepository;
 
     @Autowired
-    private PaperRepository paperRepository;
+    private ExpertAndPaperRepository expertAndPaperRepository;
 
     //查找相似专家姓名的专家信息
     @GetMapping(value = "/search/expert/name")
@@ -47,10 +45,10 @@ public class SearchController
             System.out.println(userList.size());
             for (int i = 0; i < userList.size(); i++)
             {
-                List<Expert> expertList = expertRepository.findExpertsByUser(userList.get(i));
+                List<Expert> expertList=expertRepository.findExpertsByUser(userList.get(i));
                 for (int j = 0; j < expertList.size(); j++)
                 {
-                    customizedExpertList.add(new CustomizedExpert(expertList.get(j),paperRepository));
+                    customizedExpertList.add(new CustomizedExpert(expertList.get(j),expertAndPaperRepository));
                 }
             }
         }
@@ -67,7 +65,7 @@ public class SearchController
             List<Expert> expertList = expertRepository.findExpertsByFieldContaining(field);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),expertAndPaperRepository));
             }
         }
         return customizedExpertList;
@@ -83,7 +81,7 @@ public class SearchController
             List<Expert> expertList = expertRepository.findExpertsByProjectContaining(project);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),expertAndPaperRepository));
             }
         }
         return customizedExpertList;
@@ -99,7 +97,7 @@ public class SearchController
             List<Expert> expertList = expertRepository.findExpertsByInstitutionContaining(institution);
             for (int i = 0; i < expertList.size(); i++)
             {
-                customizedExpertList.add(new CustomizedExpert(expertList.get(i),paperRepository));
+                customizedExpertList.add(new CustomizedExpert(expertList.get(i),expertAndPaperRepository));
             }
         }
         return customizedExpertList;

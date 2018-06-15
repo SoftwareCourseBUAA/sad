@@ -13,7 +13,6 @@ public class ExExpert
         this.expertId=(e.getExpertId());
         this.patent=(e.getPatent());
         this.project=(e.getProject());
-        this.paper=(e.getPaper());
         this.institution=(e.getInstitution());
         this.introducation=(e.getIntroducation());
         this.otherAchievement=(e.getOtherAchievement());

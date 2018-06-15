@@ -13,10 +13,6 @@ public class Paper
 
     private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "expert_id",foreignKey = @ForeignKey(name = "PAPER_EXPERT_ID_FK"))
-    private Expert expert;
-
     public Integer getPaperId() {
         return paperId;
     }
@@ -41,11 +37,4 @@ public class Paper
         this.title = title;
     }
 
-    public Expert getExpert() {
-        return expert;
-    }
-
-    public void setExpert(Expert expert) {
-        this.expert = expert;
-    }
 }
