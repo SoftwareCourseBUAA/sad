@@ -20,11 +20,11 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
 
         public List<Expert> findExpertsByUser(User user);
 
-        public List<Expert> findExpertsByFieldLike(String field);
+        public List<Expert> findExpertsByFieldContaining(String field);
 
-        public List<Expert> findExpertsByProjectLike(String project);
+        public List<Expert> findExpertsByProjectContaining(String project);
 
-        public List<Expert> findExpertsByInstitutionLike(String institution);
+        public List<Expert> findExpertsByInstitutionContaining(String institution);
 
         public Expert findExpertByUser(User user);
 }

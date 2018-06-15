@@ -1,9 +1,7 @@
 package com.expert.demo.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 //用户类
 @Entity
@@ -71,4 +69,5 @@ public class User
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
 }

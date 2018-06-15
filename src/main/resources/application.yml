@@ -1,13 +1,14 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/data?useSSL=true
-    username: root
+    url: jdbc:mysql://39.107.106.211:3306/data?useSSL=false
+    username: loulis
     password: qw483620
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 server:
   port: 8081

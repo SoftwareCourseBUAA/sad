@@ -29,7 +29,7 @@ public class Achievement
 
     //成果所属专家
     @ManyToOne
-    @JoinColumn(name="expert_id")
+    @JoinColumn(name="expert_id",foreignKey = @ForeignKey(name = "ACHIEVEMENT_EXPERT_ID_FK"))
     private Expert expert;
 
     public Integer getAchievementId() {

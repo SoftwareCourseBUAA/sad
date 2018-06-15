@@ -2,6 +2,7 @@ package com.expert.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,15 +10,15 @@ import java.util.Date;
 public class Message
 {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer messageId;
 
     @ManyToOne
-    @JoinColumn(name="sender_id")
+    @JoinColumn(name="sender_id",foreignKey = @ForeignKey(name = "SENDER_ID_FK"))
     private User sender;
 
     @ManyToOne
-    @JoinColumn(name="receiver_id")
+    @JoinColumn(name="receiver_id",foreignKey = @ForeignKey(name = "RECEIVER_ID_FK"))
     private User receiver;
 
     @Basic(fetch = FetchType.LAZY)

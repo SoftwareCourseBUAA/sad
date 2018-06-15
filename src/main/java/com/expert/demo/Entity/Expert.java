@@ -10,14 +10,6 @@ public class Expert
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer expertId;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     //专家姓名
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "TEXT")
@@ -60,9 +52,9 @@ public class Expert
     private Boolean isAuthenticated;
 
 
-    @OneToOne
-    @JoinColumn(name="user_id")
-    //外键，代表专家关联的用户
+    //外键，代表专家对应的用户
+    @ManyToOne
+    @JoinColumn(name = "user_id",foreignKey = @ForeignKey(name = "EXPERT_USER_ID_FK"))
     private User user;
 
     public Integer getExpertId() {
@@ -71,6 +63,14 @@ public class Expert
 
     public void setExpertId(Integer expertId) {
         this.expertId = expertId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getField() {
@@ -121,14 +121,6 @@ public class Expert
         this.otherAchievement = otherAchievement;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getIntroducation() {
         return introducation;
     }
@@ -137,11 +129,21 @@ public class Expert
         this.introducation = introducation;
     }
 
-    public Boolean getIsAuthenticated() {
+    public Boolean getAuthenticated() {
         return isAuthenticated;
     }
 
-    public void setIsAuthenticated(Boolean isAuthenticated) {
-        this.isAuthenticated = isAuthenticated;
+    public void setAuthenticated(Boolean authenticated) {
+        isAuthenticated = authenticated;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
 }

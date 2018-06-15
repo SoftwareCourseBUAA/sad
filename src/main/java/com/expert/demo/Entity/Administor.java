@@ -6,11 +6,11 @@ import javax.persistence.*;
 public class Administor
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer administorId;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",foreignKey = @ForeignKey(name = "ADMINISTOR_USER_ID_FK"))
     private User user;
 
     public Integer getAdministorId() {
