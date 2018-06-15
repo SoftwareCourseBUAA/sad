@@ -6,6 +6,7 @@ import com.expert.demo.Entity.Expert;
 import com.expert.demo.Repository.AchievementRepository;
 import com.expert.demo.Repository.ExpertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,7 +57,7 @@ public class AchievementController
             {
                 achievement.setPoint(0);
             }
-            String downloadUrl="F:/upload/"+exAchievement.getAchievementName();
+            String downloadUrl="upload/"+exAchievement.getAchievementName();
             achievement.setDownloadUrl(downloadUrl);
             achievementRepository.save(achievement);
             return true;
@@ -94,11 +95,11 @@ public class AchievementController
         }
     }
     @PostMapping(value = "achievement/upload")
-    public String upLoadAchievement(@RequestParam("file") MultipartFile file,HttpServletRequest request)
+    public Boolean upLoadAchievement(@RequestParam("file") MultipartFile file,HttpServletRequest request)
     {
         if (!file.isEmpty()) {
             String saveFileName = file.getOriginalFilename();
-            String pathName="F:/upload/"+saveFileName;
+            String pathName="upload/"+saveFileName;
             File saveFile = new File(pathName);
             if (!saveFile.getParentFile().exists()) {
                 saveFile.getParentFile().mkdirs();
@@ -108,16 +109,16 @@ public class AchievementController
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
-                return pathName;
+                return true;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                return "";
+                return false;
             } catch (IOException e) {
                 e.printStackTrace();
-                return "";
+                return false;
             }
         }
-        return "";
+        return true;
     }
     @GetMapping(value = "achievement/delete")
     public Boolean deleteAchievement(@RequestParam("achievementId") int achievementId)
