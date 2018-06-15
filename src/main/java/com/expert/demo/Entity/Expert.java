@@ -51,6 +51,7 @@ public class Expert
     //专家对于自己门户的管理权
     private Boolean isAuthenticated;
 
+    private Integer tradingNumber;
 
     //外键，代表专家对应的用户
     @ManyToOne
@@ -145,5 +146,11 @@ public class Expert
         this.user = user;
     }
 
+    public Integer getTradingNumber() {
+        return tradingNumber;
+    }
 
+    public void setTradingNumber(Integer tradingNumber) {
+        this.tradingNumber = tradingNumber;
+    }
 }
