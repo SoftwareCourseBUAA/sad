@@ -1,6 +1,10 @@
 package com.expert.demo.Repository;
 
 import com.expert.demo.Entity.User;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +19,5 @@ public interface UserRepository extends JpaRepository<User,Integer>
 
     public User findByUserId(int userId);
 
-    public List<User> findUsersByNameContaining(String name);
+    public Page<User> findUsersByNameContaining(String name, Pageable pageable);
 }

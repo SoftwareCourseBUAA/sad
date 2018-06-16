@@ -9,6 +9,9 @@ import com.expert.demo.Entity.ExpertAndPaper;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,12 +39,13 @@ public class SearchController
 
     //查找相似专家姓名的专家信息
     @GetMapping(value = "/search/expert/name")
-    public List<CustomizedExpert> getExpertsByName(@RequestParam("name") String name)
+    public List<CustomizedExpert> getExpertsByName(@RequestParam("name") String name,@RequestParam("page") int page, @RequestParam("size") int size)
     {
         List<CustomizedExpert> customizedExpertList=new ArrayList<>();
         if( name!=""&&name!=null )
         {
-            List<User> userList = userRepository.findUsersByNameContaining(name);
+            Pageable pageable=new PageRequest(page,size, Sort.Direction.ASC,"userId");
+            List<User> userList = userRepository.findUsersByNameContaining(name,pageable).getContent();
             System.out.println(userList.size());
             for (int i = 0; i < userList.size(); i++)
             {

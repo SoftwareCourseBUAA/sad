@@ -10,6 +10,9 @@ import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.TradingRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,13 +133,14 @@ public class TradingController
 
     //查询特定用户的全部交易记录
     @GetMapping(value = "/trading/user/{userId}")
-    public List<Trading> getTradingsByUser(@PathVariable("userId") int userId )
+    public List<Trading> getTradingsByUser(@PathVariable("userId") int userId ,@RequestParam("page") int page,@RequestParam("size") int size)
     {
         List<Trading> tradingList=new ArrayList<>();
         User user=userRepository.findByUserId(userId);
         if( user!=null )
         {
-            tradingList=tradingRepository.findTradingsByUser(user);
+            Pageable pageable=new PageRequest(page,size, Sort.Direction.ASC,"tradingId");
+            tradingList=tradingRepository.findTradingsByUser(user,pageable).getContent();
             for( int i=0;i<tradingList.size();i++ )
             {
                 tradingList.get(i).getAchievement().setDownloadUrl("");
@@ -153,13 +157,14 @@ public class TradingController
 
     //查询特定资源的交易记录
     @GetMapping(value = "/trading/achievement/{achievementId}")
-    public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId )
+    public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId ,@RequestParam("page") int page,@RequestParam("size") int size)
     {
         List<Trading> tradingList=new ArrayList<>();
         Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
         if( achievement!=null )
         {
-            tradingList=tradingRepository.findTradingsByAchievement(achievement);
+            Pageable pageable=new PageRequest(page,size, Sort.Direction.ASC,"tradingId");
+            tradingList=tradingRepository.findTradingsByAchievement(achievement,pageable).getContent();
             return tradingList;
         }
         else
