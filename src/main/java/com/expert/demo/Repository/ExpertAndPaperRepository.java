@@ -12,4 +12,6 @@ public interface ExpertAndPaperRepository extends JpaRepository<ExpertAndPaper,I
     public List<ExpertAndPaper> findAllByExpert_User(User user);
 
     public List<ExpertAndPaper> findAllByExpert(Expert expert);
+
+
 }

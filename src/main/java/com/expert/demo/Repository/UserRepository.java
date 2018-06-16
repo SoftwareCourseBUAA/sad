@@ -18,6 +18,4 @@ public interface UserRepository extends JpaRepository<User,Integer>
     public User findByNickname(String nickname);
 
     public User findByUserId(int userId);
-
-    public Page<User> findUsersByNameContaining(String name, Pageable pageable);
 }
