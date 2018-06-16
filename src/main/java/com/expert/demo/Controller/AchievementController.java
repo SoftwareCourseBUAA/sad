@@ -59,7 +59,7 @@ public class AchievementController
             {
                 achievement.setPoint(0);
             }
-            String downloadUrl="F:/upload/"+exAchievement.getAchievementName();
+            String downloadUrl="upload/"+exAchievement.getAchievementName();
             achievement.setDownloadUrl(downloadUrl);
             achievementRepository.save(achievement);
             return true;
@@ -101,7 +101,7 @@ public class AchievementController
     {
         if (!file.isEmpty()) {
             String saveFileName = file.getOriginalFilename();
-            String pathName="F:/upload/"+saveFileName;
+            String pathName="upload/"+saveFileName;
             File saveFile = new File(pathName);
             if (!saveFile.getParentFile().exists()) {
                 saveFile.getParentFile().mkdirs();
@@ -143,9 +143,15 @@ public class AchievementController
         if( expert!=null )
         {
             achievementList=achievementRepository.getAchievementsByExpert(expert);
-            for( int i=0;i<achievementList.size();i++ )
+            if( achievementList.size()>0 )
             {
-                achievementList.get(i).getExpert().getUser().setPassword("");
+                if( achievementList.get(0).getExpert().getUser()!=null )
+                {
+                    for (int i = 0; i < achievementList.size(); i++)
+                    {
+                        achievementList.get(i).getExpert().getUser().setPassword("");
+                    }
+                }
             }
         }
         return achievementList;
