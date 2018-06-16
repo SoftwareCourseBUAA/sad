@@ -62,6 +62,7 @@ public class AchievementController
             }
             String downloadUrl="upload/"+exAchievement.getAchievementName();
             achievement.setDownloadUrl(downloadUrl);
+            achievement.setDownloadNumber(0);
             achievementRepository.save(achievement);
             return true;
         }
