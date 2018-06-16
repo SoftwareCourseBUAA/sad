@@ -9,6 +9,9 @@ import com.expert.demo.Entity.ExpertAndPaper;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -105,12 +108,20 @@ public class SearchController
 
     //查找相似命名的成果信息
     @GetMapping(value = "/search/achievement")
-    public List<CustomizedAchievement> getAchievementsByName(@RequestParam("name") String name)
+    public List<CustomizedAchievement> getAchievementsByName(@RequestParam("name") String name,
+                                                             @RequestParam(value = "page",defaultValue = "-1") int page,
+                                                             @RequestParam(value = "size",defaultValue = "-1") int size)
     {
         List<CustomizedAchievement> customizedAchievementList=new ArrayList<>();
         if( name!=null&&name!="" )
         {
-            List<Achievement> achievementList=achievementRepository.getAchievementsByAchievementNameContaining(name);
+            if(page==-1||size==-1) {
+                List<Achievement> achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name);
+            }
+            else {
+                Pageable pageable=new PageRequest(page,size,Sort.Direction.ASC,"achievementId");
+                List<Achievement> achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name,pageable).getContent();
+            }
             for( int i=0;i<achievementList.size();i++ )
             {
                 customizedAchievementList.add(new CustomizedAchievement(achievementList.get(i)));
