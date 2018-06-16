@@ -115,12 +115,13 @@ public class SearchController
         List<CustomizedAchievement> customizedAchievementList=new ArrayList<>();
         if( name!=null&&name!="" )
         {
+            List<Achievement> achievementList;
             if(page==-1||size==-1) {
-                List<Achievement> achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name);
+                achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name);
             }
             else {
                 Pageable pageable=new PageRequest(page,size,Sort.Direction.ASC,"achievementId");
-                List<Achievement> achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name,pageable).getContent();
+                achievementList = achievementRepository.getAchievementsByAchievementNameContaining(name,pageable).getContent();
             }
             for( int i=0;i<achievementList.size();i++ )
             {
