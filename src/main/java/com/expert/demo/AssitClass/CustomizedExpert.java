@@ -1,7 +1,9 @@
 package com.expert.demo.AssitClass;
 
 import com.expert.demo.Entity.Expert;
+import com.expert.demo.Entity.ExpertAndPaper;
 import com.expert.demo.Entity.Paper;
+import com.expert.demo.Repository.ExpertAndPaperRepository;
 import com.expert.demo.Repository.PaperRepository;
 
 import java.util.ArrayList;
@@ -59,16 +61,16 @@ public class CustomizedExpert
         this.paperList = paperList;
     }
 
-    public CustomizedExpert(Expert expert, PaperRepository paperRepository)
+    public CustomizedExpert(Expert expert,ExpertAndPaperRepository expertAndPaperRepository)
     {
         this.expertId=expert.getExpertId();
         this.name=expert.getUser().getName();
         this.field=expert.getField();
         this.paperList=new ArrayList<>();
-        List<Paper> papers=paperRepository.findPapersByExpert(expert);
-        for( int i=0;i<papers.size();i++)
+        List<ExpertAndPaper> expertAndPaperList =expertAndPaperRepository.findAllByExpert(expert);
+        for( int i=0;i<expertAndPaperList.size();i++)
         {
-            paperList.add(new CustomizedPaper(papers.get(i)));
+            paperList.add(new CustomizedPaper(expertAndPaperList.get(i).getPaper()));
         }
         this.patent=expert.getPatent();
     }

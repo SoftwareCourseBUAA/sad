@@ -145,9 +145,15 @@ public class AchievementController
         if( expert!=null )
         {
             achievementList=achievementRepository.getAchievementsByExpert(expert);
-            for( int i=0;i<achievementList.size();i++ )
+            if( achievementList.size()>0 )
             {
-                achievementList.get(i).getExpert().getUser().setPassword("");
+                if( achievementList.get(0).getExpert().getUser()!=null )
+                {
+                    for (int i = 0; i < achievementList.size(); i++)
+                    {
+                        achievementList.get(i).getExpert().getUser().setPassword("");
+                    }
+                }
             }
         }
         return achievementList;

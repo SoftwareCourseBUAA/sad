@@ -28,7 +28,6 @@ public class Expert
     @Column(columnDefinition = "TEXT")
     private String project;
 
-
     //专家授权专利
     @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "TEXT")

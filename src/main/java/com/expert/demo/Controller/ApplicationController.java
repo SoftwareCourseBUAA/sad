@@ -82,6 +82,4 @@ public class ApplicationController {
         applicationRepository.delete(t);
         return true;
     }
-
-
 }
