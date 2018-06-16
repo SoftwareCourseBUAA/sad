@@ -27,4 +27,12 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
         public List<Expert> findExpertsByInstitutionContaining(String institution);
 
         public Expert findExpertByUser(User user);
+
+        @Query(value = "select * from expert order by trading_number desc limit 100",nativeQuery = true)
+        public List<Expert> getTop100Expert();
+
+        @Query(nativeQuery = true,value = "select institution from expert group by institution " +
+                "order by sum(trading_number) desc limit 100")
+        public List<String> getTop100Institution();
+
 }
