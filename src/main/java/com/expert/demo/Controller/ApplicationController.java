@@ -30,6 +30,9 @@ public class ApplicationController {
         return applicationRepository.findAll();
     }
 
+    @GetMapping(value="/admin/count")
+    public int getApplicationCount(){return applicationRepository.getAppNumber();}
+
     @GetMapping(value="/admin/apply/add/{userId}/{expertId}")
     public Application addApplication(@PathVariable("userId") int userid, @PathVariable("expertId") int expertid)
     {
