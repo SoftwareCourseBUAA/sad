@@ -8,6 +8,8 @@ import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 public class ExpertController
@@ -17,6 +19,20 @@ public class ExpertController
 
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping(value="/expert/all")
+    public List<Expert> getAllExperts()
+    {
+        return expertRepository.findAll();
+    }
+
+    @GetMapping(value="/expert/e_id/{e_id}")
+    public Expert getExpertByEId(@PathVariable("e_id") int eid)
+    {
+        Expert expert = expertRepository.getByExpertId(eid);
+        return expert;
+    }
+
 
     @GetMapping(value="/expert/name/{name}")
     public Expert getExpertInfoByName(@PathVariable("name") String name)
@@ -72,8 +88,6 @@ public class ExpertController
                 expert1.setIntroducation(expert.getIntroducation());
             if( expert.getOtherAchievement()!=null )
                 expert1.setOtherAchievement(expert.getOtherAchievement());
-            if(expert.getPaper()!=null)
-                expert1.setPaper(expert.getPaper());
             if(expert.getPatent()!=null)
                 expert1.setPatent(expert.getPatent());
             if(expert.getProject()!=null)
@@ -110,8 +124,6 @@ public class ExpertController
             expert1.setInstitution(expert.getInstitution());
             if(expert.getOtherAchievement()!=null)
             expert1.setOtherAchievement(expert.getOtherAchievement());
-            if(expert.getPaper()!=null)
-            expert1.setPaper(expert.getPaper());
             if(expert.getProject()!=null)
             expert1.setProject(expert.getProject());
             if(expert.getPatent()!=null)

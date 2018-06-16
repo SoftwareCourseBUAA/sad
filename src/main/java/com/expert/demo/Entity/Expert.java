@@ -28,10 +28,6 @@ public class Expert
     @Column(columnDefinition = "TEXT")
     private String project;
 
-    //专家科研论文
-    @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "TEXT")
-    private String paper;
 
     //专家授权专利
     @Basic(fetch = FetchType.LAZY)
@@ -96,14 +92,6 @@ public class Expert
 
     public void setProject(String project) {
         this.project = project;
-    }
-
-    public String getPaper() {
-        return paper;
-    }
-
-    public void setPaper(String paper) {
-        this.paper = paper;
     }
 
     public String getPatent() {
