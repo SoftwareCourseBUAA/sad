@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -23,6 +21,10 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
         public int getNumberOfExpertByUser(User user);
 
         public Page<Expert> findExpertsByNameContaining(String name , Pageable pageable);
+        @Query("select  COUNT(e) from Expert e where e.expertId>0")
+        public int getNumberOfExpert();
+
+        public List<Expert> findExpertsByUser(User user);
 
         public Page<Expert> findExpertsByFieldContaining(String field,Pageable pageable);
 

@@ -26,6 +26,9 @@ public class ExpertController
         return expertRepository.findAll();
     }
 
+    @GetMapping(value="/expert/count")
+    public int getExpertsCount(){return expertRepository.getNumberOfExpert();}
+
     @GetMapping(value="/expert/e_id/{e_id}")
     public Expert getExpertByEId(@PathVariable("e_id") int eid)
     {
