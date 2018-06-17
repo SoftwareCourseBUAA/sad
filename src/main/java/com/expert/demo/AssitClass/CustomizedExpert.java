@@ -74,4 +74,5 @@ public class CustomizedExpert
         }
         this.patent=expert.getPatent();
     }
+
 }

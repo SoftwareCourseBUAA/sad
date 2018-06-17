@@ -1,13 +1,18 @@
 package com.expert.demo.Controller;
 
-import com.expert.demo.AssitClass.ExExpert;
+import com.expert.demo.AssitClass.CustomizedExpert;
 import com.expert.demo.Entity.Expert;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import com.expert.demo.AssitClass.CustomizedExpertForAdmin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -21,9 +26,16 @@ public class ExpertController
     private UserRepository userRepository;
 
     @GetMapping(value="/expert/all")
-    public List<Expert> getAllExperts()
+    public List<CustomizedExpertForAdmin> getAllExperts(@RequestParam("page") int page, @RequestParam("size") int size)
     {
-        return expertRepository.findAll();
+        List<CustomizedExpertForAdmin> customizedExpertList=new ArrayList<>();
+        Pageable pageable=new PageRequest(page,size, Sort.Direction.ASC,"expertId");
+        List<Expert> expertList=expertRepository.findAll(pageable).getContent();
+        for (int j = 0; j < expertList.size(); j++)
+        {
+            customizedExpertList.add(new CustomizedExpertForAdmin(expertList.get(j)));
+        }
+        return customizedExpertList;
     }
 
     @GetMapping(value="/expert/count")
@@ -95,6 +107,8 @@ public class ExpertController
                 expert1.setPatent(expert.getPatent());
             if(expert.getProject()!=null)
                 expert1.setProject(expert.getProject());
+            if(expert.getTradingNumber()!=null)
+                expert1.setTradingNumber(expert.getTradingNumber());
             if(expert.getName()!=null)
             {
                 expert1.setName(expert.getName());
@@ -119,6 +133,7 @@ public class ExpertController
         if(expert!=null && expert.getName()!=null&&expertRepository.getByName(expert.getName())==null)
         {
             expert1.setName(expert.getName());
+            expert1.setTradingNumber(0);
             if(expert.getField()!=null)
             expert1.setField(expert.getField());
             if(expert.getIntroducation()!=null)
