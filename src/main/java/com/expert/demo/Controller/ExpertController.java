@@ -107,6 +107,8 @@ public class ExpertController
                 expert1.setPatent(expert.getPatent());
             if(expert.getProject()!=null)
                 expert1.setProject(expert.getProject());
+            if(expert.getTradingNumber()!=null)
+                expert1.setTradingNumber(expert.getTradingNumber());
             if(expert.getName()!=null)
             {
                 expert1.setName(expert.getName());
@@ -131,6 +133,7 @@ public class ExpertController
         if(expert!=null && expert.getName()!=null&&expertRepository.getByName(expert.getName())==null)
         {
             expert1.setName(expert.getName());
+            expert1.setTradingNumber(0);
             if(expert.getField()!=null)
             expert1.setField(expert.getField());
             if(expert.getIntroducation()!=null)
