@@ -6,6 +6,9 @@ import com.expert.demo.Entity.Expert;
 import com.expert.demo.Repository.AchievementRepository;
 import com.expert.demo.Repository.ExpertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -138,7 +141,9 @@ public class AchievementController
 
 
     @GetMapping(value = "/achievement/expert/{expertId}")
-    public List<Achievement> getAchievementByExpert( @PathVariable("expertId") int expertId)
+    public List<Achievement> getAchievementByExpert( @PathVariable("expertId") int expertId,
+                                                     @RequestParam(value = "page",defaultValue = "-1") int page,
+                                                     @RequestParam(value = "size",defaultValue = "-1") int size)
     {
         Expert expert=expertRepository.getByExpertId(expertId);
         List<Achievement> achievementList=new ArrayList<>();
@@ -156,6 +161,15 @@ public class AchievementController
                 }
             }
         }
-        return achievementList;
+        else
+            return null;
+        if(page==-1||size==-1)
+            return achievementList;
+        else
+        {
+            Pageable pageable=new PageRequest(page,size,Sort.Direction.ASC,"achievementId");
+            return achievementRepository.getAchievementsByExpert(expert,pageable).getContent();
+        }
+
     }
 }

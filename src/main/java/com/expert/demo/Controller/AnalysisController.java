@@ -22,7 +22,7 @@ public class AnalysisController {
     @GetMapping(value = "/analysis/popularAchievement")
     public List<Achievement> getTopAchievement()
     {
-        return achievementRepository.getTop100Achievemnt();
+        return achievementRepository.getTop100Achievement();
     }
 
     @GetMapping(value="/analysis/popularExpert")

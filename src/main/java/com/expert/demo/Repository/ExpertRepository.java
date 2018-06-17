@@ -2,6 +2,8 @@ package com.expert.demo.Repository;
 
 import com.expert.demo.Entity.Expert;
 import com.expert.demo.Entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,16 +20,17 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
         @Query("select COUNT(u) from Expert u where u.user=?1")
         public int getNumberOfExpertByUser(User user);
 
+        public Page<Expert> findExpertsByNameContaining(String name , Pageable pageable);
         @Query("select  COUNT(e) from Expert e where e.expertId>0")
         public int getNumberOfExpert();
 
         public List<Expert> findExpertsByUser(User user);
 
-        public List<Expert> findExpertsByFieldContaining(String field);
+        public Page<Expert> findExpertsByFieldContaining(String field,Pageable pageable);
 
-        public List<Expert> findExpertsByProjectContaining(String project);
+        public Page<Expert> findExpertsByProjectContaining(String project,Pageable pageable);
 
-        public List<Expert> findExpertsByInstitutionContaining(String institution);
+        public Page<Expert> findExpertsByInstitutionContaining(String institution,Pageable pageable);
 
         public Expert findExpertByUser(User user);
 

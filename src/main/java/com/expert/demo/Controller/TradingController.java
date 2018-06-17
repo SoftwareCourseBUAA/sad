@@ -10,6 +10,9 @@ import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.TradingRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,39 +75,39 @@ public class TradingController
     @Transactional
     public String buyAchievement(@RequestBody ExTrading exTrading)
     {
-        int userId=exTrading.getUserId();
-        int point=exTrading.getPoint();
-        int achievementId=exTrading.getAchievementId();
-        User user=userRepository.findByUserId(userId);
-        Achievement achievement=achievementRepository.findAchievementByAchievementId(achievementId);
-        User user1=achievement.getExpert().getUser();
-        Expert expert=achievement.getExpert();
-        if( user!=null&&achievement!=null )
-        {
-            if(user.getPoint()>=point&&achievement.getPoint()==point )
-            {
-                int currentPoint=user.getPoint();
-                user.setPoint(currentPoint-point);
-                userRepository.save(user);
-                user1.setPoint(user1.getPoint()+point);
-                userRepository.save(user1);
-                achievement.setDownloadNumber(achievement.getDownloadNumber()+1);
-                achievementRepository.save(achievement);
-                expert.setTradingNumber(expert.getTradingNumber()+1);
-                expertRepository.save(expert);
-                Trading trading=new Trading();
-                trading.setUser(user);
-                trading.setAchievement(achievement);
-                tradingRepository.save(trading);
-                return "success";
-            }
-            else
-            {
-                return "point is no enough!";
+        try {
+            int userId = exTrading.getUserId();
+            int point = exTrading.getPoint();
+            int achievementId = exTrading.getAchievementId();
+            User user = userRepository.findByUserId(userId);
+            Achievement achievement = achievementRepository.findAchievementByAchievementId(achievementId);
+            User user1 = achievement.getExpert().getUser();
+            Expert expert = achievement.getExpert();
+            if (user != null && achievement != null) {
+                if (user.getPoint() >= point && achievement.getPoint() == point) {
+                    int currentPoint = user.getPoint();
+                    user.setPoint(currentPoint - point);
+                    userRepository.save(user);
+                    user1.setPoint(user1.getPoint() + point);
+                    userRepository.save(user1);
+                    achievement.setDownloadNumber(achievement.getDownloadNumber() + 1);
+                    achievementRepository.save(achievement);
+                    expert.setTradingNumber(expert.getTradingNumber() + 1);
+                    expertRepository.save(expert);
+                    Trading trading = new Trading();
+                    trading.setUser(user);
+                    trading.setAchievement(achievement);
+                    tradingRepository.save(trading);
+                    return "success";
+                } else {
+                    return "point is no enough!";
+                }
+            } else {
+                return "fail";
             }
         }
-        else
-        {
+        catch (Exception e){
+            e.printStackTrace();
             return "fail";
         }
     }
@@ -130,40 +133,49 @@ public class TradingController
 
     //查询特定用户的全部交易记录
     @GetMapping(value = "/trading/user/{userId}")
-    public List<Trading> getTradingsByUser(@PathVariable("userId") int userId )
+    public List<Trading> getTradingsByUser(@PathVariable("userId") int userId ,@RequestParam("page") int page,@RequestParam("size") int size)
     {
-        List<Trading> tradingList=new ArrayList<>();
-        User user=userRepository.findByUserId(userId);
-        if( user!=null )
+        try
         {
-            tradingList=tradingRepository.findTradingsByUser(user);
-            for( int i=0;i<tradingList.size();i++ )
-            {
-                tradingList.get(i).getAchievement().setDownloadUrl("");
-                tradingList.get(i).getAchievement().getExpert().getUser().setPassword("");
-                tradingList.get(i).getUser().setPassword("");
+            List<Trading> tradingList = new ArrayList<>();
+            User user = userRepository.findByUserId(userId);
+            if (user != null) {
+                Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "tradingId");
+                tradingList = tradingRepository.findTradingsByUser(user, pageable).getContent();
+                for (int i = 0; i < tradingList.size(); i++) {
+                    tradingList.get(i).getAchievement().setDownloadUrl("");
+                    tradingList.get(i).getAchievement().getExpert().getUser().setPassword("");
+                    tradingList.get(i).getUser().setPassword("");
+                }
+                return tradingList;
+            } else {
+                return tradingList;
             }
-            return tradingList;
         }
-        else
+        catch (Exception e)
         {
-            return tradingList;
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
     //查询特定资源的交易记录
     @GetMapping(value = "/trading/achievement/{achievementId}")
-    public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId )
+    public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId ,@RequestParam("page") int page,@RequestParam("size") int size)
     {
         List<Trading> tradingList=new ArrayList<>();
-        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
-        if( achievement!=null )
-        {
-            tradingList=tradingRepository.findTradingsByAchievement(achievement);
-            return tradingList;
+        try {
+            Achievement achievement = achievementRepository.getAchievementByAchievementId(achievementId);
+            if (achievement != null) {
+                Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "tradingId");
+                tradingList = tradingRepository.findTradingsByAchievement(achievement, pageable).getContent();
+                return tradingList;
+            } else {
+                return tradingList;
+            }
         }
-        else
-        {
+        catch (Exception e){
+            e.printStackTrace();
             return tradingList;
         }
     }
@@ -172,17 +184,20 @@ public class TradingController
     @GetMapping(value = "/achievement/{achievementId}")
     public Achievement getInformationByAchievementId(@PathVariable("achievementId") int achievementId )
     {
-        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
-        if( achievement!=null )
-        {
-            achievement.getExpert().getUser().setPassword("");
-            return  achievement;
+        try {
+            Achievement achievement = achievementRepository.getAchievementByAchievementId(achievementId);
+            if (achievement != null) {
+                achievement.getExpert().getUser().setPassword("");
+                return achievement;
+            } else {
+                Achievement achievement1 = new Achievement();
+                achievement1.setAchievementId(achievementId);
+                return achievement1;
+            }
         }
-        else
-        {
-            Achievement achievement1=new Achievement();
-            achievement1.setAchievementId(achievementId);
-            return achievement1;
+        catch (Exception e){
+            e.printStackTrace();
+            return new Achievement();
         }
     }
 
@@ -190,23 +205,23 @@ public class TradingController
     @GetMapping(value = "/trading/download")
     public String getDownloadUrl(@RequestParam("userId") int userId, @RequestParam("achievementId") int achievementId)
     {
-        User user=userRepository.findByUserId(userId);
-        Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
-        if( user!=null&&achievement!=null )
-        {
-            if( achievement.getPoint()==0 )
-                return achievement.getDownloadUrl();
-            if( tradingRepository.getByUserAndAchievement(user,achievement)!=null )
-            {
-                return achievement.getDownloadUrl();
-            }
-            else
-            {
+        try {
+            User user = userRepository.findByUserId(userId);
+            Achievement achievement = achievementRepository.getAchievementByAchievementId(achievementId);
+            if (user != null && achievement != null) {
+                if (achievement.getPoint() == 0)
+                    return achievement.getDownloadUrl();
+                if (tradingRepository.getByUserAndAchievement(user, achievement) != null) {
+                    return achievement.getDownloadUrl();
+                } else {
+                    return "fail";
+                }
+            } else {
                 return "fail";
             }
         }
-        else
-        {
+        catch (Exception e) {
+            e.printStackTrace();
             return "fail";
         }
     }

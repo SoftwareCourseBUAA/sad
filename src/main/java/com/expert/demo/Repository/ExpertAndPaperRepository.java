@@ -14,6 +14,10 @@ public interface ExpertAndPaperRepository extends JpaRepository<ExpertAndPaper,I
 
     public List<ExpertAndPaper> findAllByExpert(Expert expert);
 
+<<<<<<< HEAD
     @Query(value = "select * from ExpertAndPaper u where u.expertAndPaperId=?1",nativeQuery = true)
     public ExpertAndPaper findByExpertAndPaperId(int expertAndPaperId);
+=======
+
+>>>>>>> d98eb44f548de994404d15692ef928b546f9dbe4
 }
