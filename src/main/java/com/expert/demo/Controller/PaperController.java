@@ -19,6 +19,9 @@ public class PaperController {
         return paperRepository.findAll();
     }
 
+    @GetMapping(value="/paper/all/count")
+    public  int getPaperCount(){return paperRepository.getPaperCount();}
+
     @DeleteMapping(value="/paper/{paperid}")
     public boolean deletePaperById(@PathVariable("paperid") int paperid)
     {

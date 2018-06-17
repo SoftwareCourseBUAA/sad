@@ -45,6 +45,17 @@ public class PaperAndExpertController {
         }
     }
 
+    @GetMapping(value="/papercount/{expertid}")
+    public int getPaperCount(@PathVariable("expertid") int eid)
+    {
+        Expert e = expertRepository.getByExpertId(eid);
+        if(e==null) return 0;
+        else{
+            int re = expertAndPaperRepository.getPaperCountByExpert(e);
+            return re;
+        }
+    }
+
     @PostMapping(value="/expert-paper/addone/{expertid}")
     public boolean addExpertAndPaper(@PathVariable("expertid") int expertid,@RequestBody Paper paper)
     {
