@@ -2,16 +2,21 @@ package com.expert.demo.Entity;
 
 import javax.persistence.*;
 
-//申请成为专家用户的类
+//认领已经有的专家用户的类
 @Entity
-public class Application {
+public class MatchApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int applyId;
 
+    //证明材料的下载url
+    private String downloadUrl;
+
+
     @OneToOne
     @JoinColumn(name="user_id")
+
     private User user;
 
     @OneToOne
@@ -40,5 +45,13 @@ public class Application {
 
     public void setExpert(Expert expert) {
         this.expert = expert;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class AchievementController
 
 
     @PostMapping(value = "/achievement")
-    public Boolean addAchievement(@RequestBody ExAchievement exAchievement)
+    public int addAchievement(@RequestBody ExAchievement exAchievement)
     {
         Achievement achievement=new Achievement();
         Expert expert=expertRepository.getByExpertId(exAchievement.getExpertId());
@@ -45,7 +46,7 @@ public class AchievementController
                 achievement.setType(exAchievement.getType());
             else
             {
-                return false;
+                return -1;
             }
             if(exAchievement.getAchievementName()!=null )
             {
@@ -53,7 +54,7 @@ public class AchievementController
             }
             else
             {
-                return false;
+                return -1;
             }
             if( exAchievement.getPoint()!=null )
             {
@@ -67,11 +68,11 @@ public class AchievementController
             achievement.setDownloadUrl(downloadUrl);
             achievement.setDownloadNumber(0);
             achievementRepository.save(achievement);
-            return true;
+            return achievement.getAchievementId();
         }
         else
         {
-            return false;
+            return -1;
         }
     }
     @PostMapping(value="achievement/update")
@@ -102,11 +103,14 @@ public class AchievementController
         }
     }
     @PostMapping(value = "achievement/upload")
-    public Boolean upLoadAchievement(@RequestParam("file") MultipartFile file,HttpServletRequest request)
+    public Boolean upLoadAchievement(@RequestParam("file") MultipartFile file
+            ,@RequestParam("achievementId") int achievementId)
     {
+        if(achievementId==-1)
+            return false;
         if (!file.isEmpty()) {
             String saveFileName = file.getOriginalFilename();
-            String pathName="upload/"+saveFileName;
+            String pathName = "upload/" + saveFileName;
             File saveFile = new File(pathName);
             if (!saveFile.getParentFile().exists()) {
                 saveFile.getParentFile().mkdirs();
@@ -116,7 +120,10 @@ public class AchievementController
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
-                return true;
+                String savePath=saveFile.getAbsolutePath();
+                Achievement achievement=achievementRepository.findAchievementByAchievementId(achievementId);
+                achievement.setDownloadUrl(savePath);
+                achievementRepository.save(achievement);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 return false;
