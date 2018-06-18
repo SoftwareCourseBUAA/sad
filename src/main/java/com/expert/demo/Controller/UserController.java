@@ -4,7 +4,10 @@ import com.expert.demo.AssitClass.CustomizedUser;
 import com.expert.demo.Entity.User;
 import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.UserRepository;
+import com.expert.demo.Security.PasswordStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -29,7 +32,12 @@ public class UserController
         else
         {
             user1.setNickname(user.getNickname());
-            user1.setPassword(user.getPassword());
+            try {
+                user1.setPassword(PasswordStorage.createHash(user.getPassword()));
+            } catch (PasswordStorage.CannotPerformOperationException e) {
+                e.printStackTrace();
+                return false;
+            }
             user1.setPoint(0);
             userRepository.save(user1);
             return true;
@@ -41,21 +49,34 @@ public class UserController
     public int userExistence(@RequestParam("nickname") String nickname, @RequestParam("password") String password)
     {
         User user1=userRepository.findByNickname(nickname);
-        if( user1!=null&&password.equals(user1.getPassword()))
+        if( user1!=null)
         {
-            return user1.getUserId();
+            try
+            {
+                if( PasswordStorage.verifyPassword(password,user1.getPassword()) )
+                {
+                    return user1.getUserId();
+                }
+            }
+            catch (PasswordStorage.CannotPerformOperationException e)
+            {
+                e.printStackTrace();
+                return 0;
+            }
+            catch (PasswordStorage.InvalidHashException e)
+            {
+                e.printStackTrace();
+                return 0;
+            }
         }
-        else
-        {
-            return 0;
-        }
+        return 0;
     }
 
     //用户信息展示函数
     @GetMapping(value = "/userInformation")
     public CustomizedUser getUserInformation(@RequestParam("userId") int userId)
     {
-        User user=userRepository.findByUserId(userId);
+        User user=getUserById(userId);
         CustomizedUser exUser=new CustomizedUser();
         if( user!=null)
         {
@@ -82,17 +103,30 @@ public class UserController
 
     //修改用户信息的函数,能修改email，name，nickname和password
     @PutMapping(value = "/userInformation")
+    @CachePut(cacheNames = "users",key="#root.targetClass.getName()+'_userInformation_id_'+#user.userId")
     public User modifyUserInformation(@RequestBody User user)
     {
-        User user1=userRepository.findByUserId(user.getUserId());
+        User user1=getUserById(user.getUserId());
         if( user1!=null )
         {
+            if( user.getPassword()!=null)
+            {
+                try
+                {
+                    user1.setPassword(PasswordStorage.createHash(user.getPassword()));
+                }
+                catch (PasswordStorage.CannotPerformOperationException e)
+                {
+                    e.printStackTrace();
+                    user1=new User();
+                    user1.setUserId(user.getUserId());
+                    return user1;
+                }
+            }
             if( user.getEmail()!=null)
                 user1.setEmail(user.getEmail());
             if( user.getName()!=null )
                 user1.setName(user.getName());
-            if( user.getPassword()!=null)
-                user1.setPassword(user.getPassword());
             if( user.getNickname()!=null )
             {
                 if( userRepository.getNumberOfNickname(user.getNickname())==0 )
@@ -109,5 +143,11 @@ public class UserController
         }
         user1.setPassword("");
         return user1;
+    }
+
+    @Cacheable(cacheNames = "users",key = "#root.targetClass.getName()+'_userInformation_id_'+#userId")
+    public User getUserById( int userId )
+    {
+        return userRepository.findByUserId(userId);
     }
 }

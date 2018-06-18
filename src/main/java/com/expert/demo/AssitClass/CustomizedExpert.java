@@ -64,7 +64,7 @@ public class CustomizedExpert
     public CustomizedExpert(Expert expert,ExpertAndPaperRepository expertAndPaperRepository)
     {
         this.expertId=expert.getExpertId();
-        this.name=expert.getUser().getName();
+        this.name=expert.getName();
         this.field=expert.getField();
         this.paperList=new ArrayList<>();
         List<ExpertAndPaper> expertAndPaperList =expertAndPaperRepository.findAllByExpert(expert);
@@ -74,4 +74,5 @@ public class CustomizedExpert
         }
         this.patent=expert.getPatent();
     }
+
 }

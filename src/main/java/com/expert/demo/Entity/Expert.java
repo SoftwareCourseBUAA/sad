@@ -11,8 +11,6 @@ public class Expert
     private Integer expertId;
 
     //专家姓名
-    @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "TEXT")
     private String name;
 
     //专家专业领域

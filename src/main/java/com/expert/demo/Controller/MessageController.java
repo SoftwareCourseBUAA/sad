@@ -11,6 +11,9 @@ import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.MessageRepository;
 import com.expert.demo.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,13 +77,14 @@ public class MessageController
      * @return
      */
     @GetMapping(value = "/message/receiver")
-    public List<Message> getMessagesByReceiver(@RequestParam("userId") int userId )
-    {
+    public List<Message> getMessagesByReceiver(@RequestParam("userId") int userId, @RequestParam("page") int page,@RequestParam("size") int size)
+  {
         User user=userRepository.findByUserId(userId);
         List<Message> messageList=new ArrayList<>();
         if( user!=null )
         {
-            messageList=messageRepository.getMessagesByReceiverOrderBySendDateDesc(user);
+            Pageable pageable=new PageRequest(page,size, Sort.Direction.DESC,"sendDate");
+            messageList=messageRepository.getMessagesByReceiverOrderBySendDateDesc(user,pageable).getContent();
             for( int i=0;i<messageList.size();i++ )
             {
                 messageList.get(i).getSender().setPassword("");
@@ -96,7 +100,7 @@ public class MessageController
      * @return
      */
     @GetMapping(value = "/message/sender")
-    public List<Message> getMessagesBySender(@RequestParam("userId") int userId )
+    public List<Message> getMessagesBySender(@RequestParam("userId") int userId , @RequestParam("page") int page,@RequestParam("size") int size)
     {
         System.out.println(userId);
         User user=userRepository.findByUserId(userId);
@@ -104,7 +108,8 @@ public class MessageController
         List<Message> messageList=new ArrayList<>();
         if( user!=null )
         {
-            messageList=messageRepository.getMessagesBySenderOrderBySendDateDesc(user);
+            Pageable pageable=new PageRequest(page,size, Sort.Direction.DESC,"sendDate");
+            messageList=messageRepository.getMessagesBySenderOrderBySendDateDesc(user,pageable).getContent();
             System.out.println(messageList.size());
             for( int i=0;i<messageList.size();i++ )
             {
