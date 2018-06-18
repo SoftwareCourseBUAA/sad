@@ -13,7 +13,7 @@ public interface ExpertRepository extends JpaRepository<Expert,Integer>
 {
         public Expert getByExpertId(int expertId);
 
-        public Expert getByUser(User user);
+        public List<Expert> getByUser(User user);
 
         public Expert getByName(String name);
 

@@ -61,10 +61,10 @@ public class ExpertController
     }
 
     @GetMapping(value="/expert/id/{userid}")
-    public Expert getExpertInfoByUserId(@PathVariable("userid") int userid)
+    public List<Expert> getExpertInfoByUserId(@PathVariable("userid") int userid)
     {
         User user = userRepository.findByUserId(userid);
-        Expert expert =new Expert();
+        List<Expert> expert =new ArrayList<>();
         if(user!=null)
         {
             expert = expertRepository.getByUser(user);
@@ -73,26 +73,19 @@ public class ExpertController
                 return expert;
             }
             else{
-                expert.setIntroducation("这个用户不对应任何专家");
+                return null;
             }
         }
         else{
-            expert.setIntroducation("没有这个用户的信息");
+            return null;
         }
-        return expert;
     }
 
-    @PutMapping(value="/expert/{userid}")
-    public Expert changeExpertInfo(@RequestBody Expert expert,@PathVariable("userid") int userid)
+    @PutMapping(value="/expert/{expertid}")
+    public Expert changeExpertInfo(@RequestBody Expert expert,@PathVariable("expertid") int expertid)
     {
-        User user = userRepository.findByUserId(userid);
-        if(user==null)
-        {
-            Expert e = new Expert();
-            e.setIntroducation("没有这个用户");
-            return e;
-        }
-        Expert expert1=expertRepository.getByUser(user);
+        Expert expert1=expertRepository.getByExpertId(expertid);
+        User user = expert1.getUser();
         if(expert1!=null)
         {
             if( expert.getField()!=null)
@@ -113,6 +106,10 @@ public class ExpertController
             {
                 expert1.setName(expert.getName());
                 user.setName(expert.getName());
+            }
+            if(expert.getUser().getEmail()!=null)
+            {
+                user.setEmail(expert.getUser().getEmail());
             }
             expertRepository.save(expert1);
             userRepository.save(user);
