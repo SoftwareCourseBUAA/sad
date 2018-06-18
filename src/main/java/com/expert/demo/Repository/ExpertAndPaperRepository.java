@@ -17,7 +17,7 @@ public interface ExpertAndPaperRepository extends JpaRepository<ExpertAndPaper,I
     @Query(value="select count(ep) from ExpertAndPaper ep where ep.expert=?1")
     public  int getPaperCountByExpert(Expert e);
 
-    @Query(value = "select * from ExpertAndPaper u where u.expertAndPaperId=?1",nativeQuery = true)
+    @Query(value = "select * from expert_and_paper where expert_and_paper_id=?1",nativeQuery = true)
     public ExpertAndPaper findByExpertAndPaperId(int expertAndPaperId);
 
 

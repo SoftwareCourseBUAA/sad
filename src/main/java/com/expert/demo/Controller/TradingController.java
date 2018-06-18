@@ -1,5 +1,6 @@
 package com.expert.demo.Controller;
 
+import com.expert.demo.AssitClass.CustomizedTrading;
 import com.expert.demo.AssitClass.ExTrading;
 import com.expert.demo.Entity.Achievement;
 import com.expert.demo.Entity.Expert;
@@ -34,7 +35,6 @@ public class TradingController
 
     @Autowired
     private ExpertRepository expertRepository;
-
 
     private int getPointByUserId( int userId )
     {
@@ -121,7 +121,7 @@ public class TradingController
 
     //查询对于特定用户的特定资源的交易记录存在与否
     @GetMapping(value = "/trading")
-    public Boolean getExistenceOfTrading( @RequestParam("userId") int userId, @RequestParam("achievementId") int achievementId )
+    public  Boolean getExistenceOfTrading( @RequestParam("userId") int userId, @RequestParam("achievementId") int achievementId )
     {
         User user=userRepository.findByUserId(userId);
         Achievement achievement=achievementRepository.getAchievementByAchievementId(achievementId);
@@ -133,23 +133,22 @@ public class TradingController
 
     //查询特定用户的全部交易记录
     @GetMapping(value = "/trading/user/{userId}")
-    public List<Trading> getTradingsByUser(@PathVariable("userId") int userId ,@RequestParam("page") int page,@RequestParam("size") int size)
+    public List<CustomizedTrading> getTradingsByUser(@PathVariable("userId") int userId , @RequestParam("page") int page, @RequestParam("size") int size)
     {
         try
         {
+            List<CustomizedTrading> customizedTradingList=new ArrayList<>();
             List<Trading> tradingList = new ArrayList<>();
             User user = userRepository.findByUserId(userId);
             if (user != null) {
                 Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "tradingId");
                 tradingList = tradingRepository.findTradingsByUser(user, pageable).getContent();
                 for (int i = 0; i < tradingList.size(); i++) {
-                    tradingList.get(i).getAchievement().setDownloadUrl("");
-                    tradingList.get(i).getAchievement().getExpert().getUser().setPassword("");
-                    tradingList.get(i).getUser().setPassword("");
+                    customizedTradingList.add(new CustomizedTrading(tradingList.get(i)));
                 }
-                return tradingList;
+                return customizedTradingList;
             } else {
-                return tradingList;
+                return customizedTradingList;
             }
         }
         catch (Exception e)
@@ -161,22 +160,28 @@ public class TradingController
 
     //查询特定资源的交易记录
     @GetMapping(value = "/trading/achievement/{achievementId}")
-    public List<Trading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId ,@RequestParam("page") int page,@RequestParam("size") int size)
+    public List<CustomizedTrading> getTradingsByAchievement(@PathVariable("achievementId") int achievementId ,@RequestParam("page") int page,@RequestParam("size") int size)
     {
+
         List<Trading> tradingList=new ArrayList<>();
+        List<CustomizedTrading> customizedTradingList=new ArrayList<>();
         try {
             Achievement achievement = achievementRepository.getAchievementByAchievementId(achievementId);
             if (achievement != null) {
                 Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "tradingId");
                 tradingList = tradingRepository.findTradingsByAchievement(achievement, pageable).getContent();
-                return tradingList;
+                for(int i=0;i<tradingList.size();i++ )
+                {
+                    customizedTradingList.add(new CustomizedTrading(tradingList.get(i)));
+                }
+                return customizedTradingList;
             } else {
-                return tradingList;
+                return customizedTradingList;
             }
         }
         catch (Exception e){
             e.printStackTrace();
-            return tradingList;
+            return customizedTradingList;
         }
     }
 

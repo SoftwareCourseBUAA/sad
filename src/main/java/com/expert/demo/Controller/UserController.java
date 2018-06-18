@@ -6,6 +6,8 @@ import com.expert.demo.Repository.ExpertRepository;
 import com.expert.demo.Repository.UserRepository;
 import com.expert.demo.Security.PasswordStorage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -74,7 +76,7 @@ public class UserController
     @GetMapping(value = "/userInformation")
     public CustomizedUser getUserInformation(@RequestParam("userId") int userId)
     {
-        User user=userRepository.findByUserId(userId);
+        User user=getUserById(userId);
         CustomizedUser exUser=new CustomizedUser();
         if( user!=null)
         {
@@ -101,9 +103,10 @@ public class UserController
 
     //修改用户信息的函数,能修改email，name，nickname和password
     @PutMapping(value = "/userInformation")
+    @CachePut(cacheNames = "users",key="#root.targetClass.getName()+'_userInformation_id_'+#user.userId")
     public User modifyUserInformation(@RequestBody User user)
     {
-        User user1=userRepository.findByUserId(user.getUserId());
+        User user1=getUserById(user.getUserId());
         if( user1!=null )
         {
             if( user.getPassword()!=null)
@@ -140,5 +143,11 @@ public class UserController
         }
         user1.setPassword("");
         return user1;
+    }
+
+    @Cacheable(cacheNames = "users",key = "#root.targetClass.getName()+'_userInformation_id_'+#userId")
+    public User getUserById( int userId )
+    {
+        return userRepository.findByUserId(userId);
     }
 }
