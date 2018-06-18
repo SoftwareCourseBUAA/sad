@@ -27,21 +27,14 @@ public class PaperAndExpertController {
     private ExpertAndPaperRepository expertAndPaperRepository;
 
     @GetMapping(value="/expert-paper/{expertid}")
-    public List<Paper> getPapersByExpertId(@PathVariable("expertid") int expertid)
+    public List<ExpertAndPaper> getPapersByExpertId(@PathVariable("expertid") int expertid)
     {
         Expert expert= expertRepository.getByExpertId(expertid);
         if(expert==null)
             return null;
         else{
             List<ExpertAndPaper> sumlist = expertAndPaperRepository.findAllByExpert(expert);
-            if(sumlist==null)
-                return null;
-            List<Paper> result = new ArrayList<Paper>();
-            for(ExpertAndPaper e :sumlist)
-            {
-                result.add(e.getPaper());
-            }
-            return result;
+            return sumlist;
         }
     }
 
