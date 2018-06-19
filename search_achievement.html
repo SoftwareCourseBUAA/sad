@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>专家成果管理</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body onLoad="achievementShow()">
+        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                        <i class="fa fa-lock fa-lg"></i>
+                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                                </div>
+                                <div class="form-group" >
+                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                                </div>
+                                <div class="form-group col-md-offset-9">
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+<div>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header" style="margin-left:20%">
+        <a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    </div>
+    <div style="margin-right:10%">
+        <ul class="nav navbar-nav navbar-left">  
+            <li><a href="admin/pages/main.html">主页</a></li>
+            <li><a href="pages/expertSearch.html">成果搜索</a></li>
+            <li><a href="#">加入我们</a></li>
+            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="#" onclick="exchange()">物品换取</a></li>
+	    <li><a href="#" onclick="mmail()">站内信</a></li>	
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown navbar-right">
+            <a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> 
+                     <span class="caret"></span>
+            </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+            <li class="divider"></li>
+            <li>
+                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+</div>
+    <div class="container">
+        <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="margin-top:20%">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">修改成果</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal col-md-offset-0" id="update_form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <i class="fa fa-user fa-lg"></i>
+                                    <label for="name">名称</label>
+                                    <input class="form-control" type="text" placeholder="请输入成果名称" id="achievementName1" name="achievementName1" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">简介</label>
+                                    <textarea class="form-control" placeholder="请输入简介，0~100字" id="introduction1" name="introduction1" autofocus rows="5" cols="20" maxlength="100"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">交易方式</label>
+                                    <select class="form-control" id="type1" name="type1">
+                                        <option value="">--请选择交易方式--</option>
+                                        <option value="1">积分交易</option>
+                                        <option value="2">私聊专家</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">价格</label>
+                                    <input class="form-control" type="text" placeholder="请输入定价" id="point1" name="point1" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="Change()">修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form row" style="text-align:left; margin-left:100px; margin-top:50px; float:left;">
+            <button type="submit" class="btn btn-primary" name="submit" onClick="comeback()">返回</button>
+        </div>
+        <div class="form row" style="text-align:left; margin-right:100px; margin-top:50px; float:right;">
+            <button type="submit" class="btn btn-success" name="submit" onClick="achievementUpload()">上传成果</button>
+        </div>
+        <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="margin-top:20%">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">上传成果</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal col-md-offset-0" id="update_form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <i class="fa fa-user fa-lg"></i>
+                                    <label for="name">名称</label>
+                                    <input class="form-control" type="text" placeholder="请输入成果名称" id="achievementName3" name="achievementName3" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">简介</label>
+                                    <textarea class="form-control" placeholder="请输入简介，0~100字" id="introduction3" name="introduction3" autofocus rows="5" cols="20" maxlength="100"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">交易方式</label>
+                                    <select class="form-control" id="type3" name="type3">
+                                    	<option value="">--请选择交易方式--</option>
+                                        <option value="1">积分交易</option>
+                                        <option value="2">私聊专家</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="name">价格</label>
+                                    <input class="form-control" type="text" placeholder="请输入定价" id="point3" name="point3" autofocus maxlength="20"/>
+                                </div>
+                                <form id="infile" method="post" enctype="multipart/form-data" target="frame1" class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="inputfile">文件输入</label>
+                                    <input type="file" name="file" id="upfile">
+                                	<br>
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="upLoad()">上传</button>
+                                </form>
+                                <iframe style="display:none" name="frame1" frameborder="0" height="0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="table" style="margin-top:10%;">
+        </div>
+    </div>
+</body>
+<script type='text/javascript'>
+var url="http://39.107.106.211:8081";
+var AId;
+var BId;
+	function achievementChange(aid)
+        {
+            $('#change').modal();
+			AId=aid;
+        }
+	function achievementUpload()
+        {
+            $('#upload').modal();
+        }
+	function comeback()
+		{
+			window.location="expert_info.html";
+		}
+	function parseUrl()
+		{
+        	var url=location.href;
+            var i=url.indexOf('?');
+            if(i==-1)return;
+            var querystr=url.substr(i+1);
+            var arr1=querystr.split('&');
+            var arr2=new Object();
+            for(i in arr1){
+                var ta=arr1[i].split('=');
+                arr2[ta[0]]=ta[1];
+            }
+            return arr2;
+        }
+var v = parseUrl();
+var EId = v['expertId'];
+	function Change()
+		{
+			var val1 = document.getElementById("introduction1").value;
+			var val2 = document.getElementById("point1").value;
+			var val3 = document.getElementById("type1").value;
+			var val4 = document.getElementById("achievementName1").value;
+			var val5 = AId;
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			var achievementc = {
+				"introduction":val1,
+				"point":val2,
+				"type":val3,
+				"achievementName":val4,
+				"achievementId":val5
+			}
+			achievementc = JSON.stringify(achievementc);
+			var settings = {
+				type: "POST",
+			    url:url+"/achievement/update",
+			    data:achievementc,
+			    error: function(XHR,textStatus,errorThrown) {
+			        alert("error!");
+			    },
+			    success: function(data,textStatus) {
+					if(data==false)
+					{
+						alert("修改失败！");
+					}
+					else
+					{
+						alert("修改成功！");
+						location.reload();
+					}
+			    },
+			    headers: {
+			        "Content-Type":"application/json"
+			    }
+			};
+			$.ajax(settings);
+		}
+	function achievementDelete(bid)
+		{
+			BId=bid;
+			var val = BId;
+			$.get(url+"/achievement/delete?achievementId="+val,function(data){
+				if(data==false)
+				{
+					alert("删除失败！");
+				}
+				else
+				{
+					alert("删除成功！");
+					location.reload();
+				}
+			});
+		}
+	function upLoad()
+		{
+			var val1 = document.getElementById("introduction3").value;
+			var val2 = document.getElementById("point3").value;
+			var val3 = document.getElementById("type3").value;
+			var val4 = document.getElementById("achievementName3").value;
+			var val5 = EId;
+			if(val1=="")
+			{
+				val1="这个人很懒什么都没有留下！";	
+			}
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			var achievementu = {
+				"introduction":val1,
+				"point":val2,
+				"type":val3,
+				"achievementName":val4,
+				"expertId":val5
+			}
+			achievementu = JSON.stringify(achievementu);
+			var settings = {
+				type: "POST",
+				async:false,
+			    url:url+"/achievement",
+			    data:achievementu,
+			    error: function(XHR,textStatus,errorThrown) {
+			        alert("error!");
+			    },
+			    success: function(data,textStatus) {
+					document.getElementById('infile').action=url+"/achievement/upload?achievementId="+data;
+					$("#infile").submit();
+					window.location="search_achievement.html?expertId="+EId;
+					alert("上传成功！");
+			    },
+			    headers: {
+			        "Content-Type":"application/json"
+			    }
+			};
+			if(val4=="")
+			{
+				alert("成果名称不能为空");
+			}
+			else
+			{
+				if(val3=="")
+				{
+					alert("请选择交易方式");
+				}
+				else
+				{
+					$.ajax(settings);
+				}
+			}
+		}
+    function achievementShow()
+		{
+			var aaa=uname1();
+			$.get(url+"/achievement/expert/"+EId,function(data){
+			$("#table").html("<tr style='height:50px'><td style='width:50px'>序号</td><td style='width:200px'>成果名称</td><td style='width:400px'>成果简介</td><td style='width:100px'>交易方式</td><td style='width:100px'>价格</td><td style='width:100px'>下载量</td><td style='width:70px'>操作1</td><td style='width:70px'>操作2</td></tr>");
+			//var list = eval("("+data+")");
+            	for(var i=0;;i++){
+					if(data[i].type==1)
+					{
+						var t="积分交易";
+					}
+					else
+					{
+						var t="私聊专家";
+					}
+                	$("#table").append("<tr style='height:50px'><td>"+(i+1)+
+                           "</td><td>"+data[i].achievementName+
+                           "</td><td>"+data[i].introduction+
+                           "</td><td>"+t+
+                           "</td><td>"+data[i].point+
+						   "</td><td>"+data[i].downloadNumber+
+                           "</td><td>"+"<button type='submit' class='btn btn-warning' name='submit' onClick='achievementChange("+data[i].achievementId+")'>修改</button>"+
+                           "</td><td>"+"<button type='submit' class='btn btn-danger' name='submit' onClick='achievementDelete("+data[i].achievementId+")'>删除</button>"+
+                           "</td><tr>")
+        		}
+		}); 
+		}
+				function loginShow()
+        {
+            $('#llogin').modal();
+        }
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="register.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var a=checkName();
+			$("#uname").append(a);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				document.getElementById("lin").href="#";
+				document.getElementById("lout").href="";
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				document.getElementById("lin").href="";
+				document.getElementById("lout").href="#";
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function clearall() {  
+   		 setCookie("userId", "", -1);
+		 location.reload();
+		}  
+		function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + "; " + expires;
+	    }
+		function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="mailbox.html";
+			}
+		}
+		function uinfo(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="user_info.html";
+			}
+		}
+</script>
+</html>

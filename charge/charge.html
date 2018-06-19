@@ -1,0 +1,463 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>论文网</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+<link href="../css/base.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../css/help.css"/>
+
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="layui/css/layui.css">
+<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+<!--js区域-->
+<script type="text/javascript" src="../js/jquery-1.8.1.min.js"></script>
+
+<script type="text/javascript">
+var url="http://39.107.106.211:8081";
+function showPoint()
+		{
+			var val1 =getCookie("userId");
+            //val1=2;
+			$.get(url+"/userPoint?userId="+val1,function(data)
+			{
+				document.getElementById("showPoint").innerHTML=data;
+      			
+			});	
+		}
+function chongzhi()
+{
+	var userId=getCookie("userId");
+	//var userId=2;
+	var $li = $(".fwmc_xxk").children("li.on");
+		var money = $li.children("i").text();
+		var count = $(".srkk").val();
+	var point=money*count;
+	//var achievementId=1;
+	var chongzhi = {
+        		"userId":userId,
+				"point":point,
+				//"achievementId":achievementId
+        	}
+	chongzhi = JSON.stringify(chongzhi);
+	var settings = {
+			        type:"put",
+			        url:url+"/point",
+					//dataType : "json" ,
+			        data:chongzhi,
+					async:false,
+					success : function(data) {
+               alert("充值成功");
+            } ,
+            error : function(data) {
+               alert("error");
+            } ,
+			headers:{
+			            "Content-Type":"application/json"
+			        }
+			};
+			$.ajax(settings);
+}
+</script>
+<script type="text/javascript">
+
+$(document).ready(function(e) {
+    $(".fwmc_xxk li").click(function(){
+		//var fw_price = $(this).children("i").text();
+		//var fw_numb = $(".srkk").val();
+		//var fw_tal = fw_price*fw_numb;
+		//$(".zwfb_zje span").text(fw_tal);
+		$(this).addClass("on").siblings().removeClass("on");
+		tola();
+		});
+	//加
+	$(".jia").click(function(){
+		var fw_numb = $(".srkk").val();	
+		fw_numb++;
+		$(".srkk").val(fw_numb);		
+		/*$(".fwmc_xxk li").each(function() {
+            if($(this).hasClass("on")){
+				var dqzt_price = $(this).children("i").text();
+				//alert(dqzt_price);
+				var zgsj_jia = dqzt_price*fw_numb;
+				$(".zwfb_zje span").text(zgsj_jia);
+				}
+        }); */
+		tola();
+		})
+		
+	//减
+	$(".jian").click(function(){
+		var fw_numb = $(".srkk").val();	
+		if(fw_numb <= 1){
+			alert("数量不足")
+			}else{
+		fw_numb--;
+		$(".srkk").val(fw_numb);		
+			}
+		/*$(".fwmc_xxk li").each(function() {
+            if($(this).hasClass("on")){
+				var dqzt_price = $(this).children("i").text();
+				//alert(dqzt_price);
+				var zgsj_jia = dqzt_price*fw_numb;
+				$(".zwfb_zje span").text(zgsj_jia);
+				}
+        }); */
+		tola();
+		})	
+	 
+	
+});
+
+function tola(){
+		var $li = $(".fwmc_xxk").children("li.on");
+		var money = $li.children("i").text();
+		var count = $(".srkk").val();
+		$(".zwfb_zje span").text(money*count);
+}
+function uinfo(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="user_info.html";
+			}
+		}
+
+function recharge()
+{
+	//var userId=getCookie("userId");
+	var userId=2;
+	var point=100;
+	var user = {
+        		"userId":userId,
+				"point":point
+        	}
+	user = JSON.stringify(user);
+	var settings = {
+			        type:"put",
+			        url:url+"/point",
+			        data:user,
+			        error:function(XHR,textStatus,errorThrown) {
+			            alert("error!");
+						//window.location.href='write.html?userId='+id;
+			        },
+			        success:function(data,textStatus) {
+			            alert(data);
+						alert("充值成功！");
+			        },
+			        headers:{
+			            "Content-Type":"application/json"
+			        }
+			        
+			};
+			$.ajax(settings);
+}
+
+function show()
+{
+	document.write("1");
+}
+		function loginShow()
+        {
+            $('#llogin').modal();
+        }
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="register.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var a=checkName();
+			$("#uname").append(a);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				document.getElementById("lin").href="#";
+				document.getElementById("lout").href="";
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				document.getElementById("lin").href="";
+				document.getElementById("lout").href="#";
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function clearall() {  
+   		 setCookie("userId", "", -1);
+		 location.reload();
+		}  
+		function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + "; " + expires;
+	    }
+		function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="alter/Mail.html";
+			}
+		}	
+</script>
+
+
+
+</head>
+
+<body class="layui-layout-body">
+
+<div class="layui-layout layui-layout-admin">
+
+<body onLoad="uname1()">
+        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                        <i class="fa fa-lock fa-lg"></i>
+                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                                </div>
+                                <div class="form-group" >
+                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                                </div>
+                                <div class="form-group col-md-offset-9">
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+<div>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header" style="margin-left:20%">
+        <a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    </div>
+    <div style="margin-right:10%">
+        <ul class="nav navbar-nav navbar-left">  
+            <li><a href="admin/pages/main.html">主页</a></li>
+            <li><a href="pages/expertSearch.html">成果搜索</a></li>
+            <li class="active"><a href="#">加入我们</a></li>
+            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="#" onclick="exchange()">物品换取</a></li>
+	    <li><a href="#" onclick="mmail()">站内信</a></li>	
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown navbar-right">
+            <a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> 
+                     <span class="caret"></span>
+            </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+                <li>
+                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+</div>
+					
+</body>       
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+      	<li class="layui-nav-item"><a class="layui-this" href="exchange.html">交易</a></li>
+        <li class="layui-nav-item"><a class="layui-this" href="charge.html">充值</a></li>
+        
+        <li class="layui-nav-item"><a class="layui-this" href="exchange_record.html">交易记录</a></li>
+        
+        
+      </ul>
+    </div>
+  </div>
+
+
+<body>
+ 
+
+
+  
+  <div  class="fw_conent"> 
+    <!--内容开始------------------------------>
+    <div class="bzzx_bt"> <strong>科技网充值中心</strong></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="zwfb_shop_table">
+      <tr valign="top">
+        <td align="right" width="70">充值积分数量：</td>
+        <td><ul class="fwmc_xxk">
+            <li class="on">
+              <p>充值6000积分</p>
+              <i>600</i>元</li>
+            <li >
+              <p>充值5000积分</p>
+              <i>500</i>元</li>
+            <li >
+              <p>充值4000积分</p>
+              <i>400</i>元</li>
+            <li >
+              <p>充值3000积分</p>
+              <i>300</i>元</li>
+            <li >
+              <p>充值2000积分</p>
+              <i>200</i>元</li>
+            <li >
+              <p>充值1000积分</p>
+              <i>100</i>元</li>
+          </ul></td>
+      </tr>
+      <tr>
+        <td align="right">充值方式：</td>
+        <td><div class=" zwsl_num">支付宝</div> </td>
+      </tr>
+      <tr>
+        <td align="right">当前积分数：</td>
+        <script>
+			showPoint();
+			</script>
+        <td><div class=" zwsl_num" >
+        <dd id="showPoint"></dd>
+        </div> </td>
+        
+      </tr>
+      <tr>
+        <td height="20"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td align="right">购买数量：</td>
+        <td><ul class="nmb_jj">
+            <li class="jian">-</li>
+            <li>
+              <input name="" type="text" value="1" class="srkk" />
+            </li>
+            <li class="jia">+</li>  
+          </ul></td>
+      </tr>
+      <tr>
+        <td height="20"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td align="right">价格：</td>
+        <td><div class="zwfb_zje"><span>600</span> <i>元</i></div></td>
+      </tr>
+     
+      <tr>
+        <td></td>
+        <td><a class="ty_but ml20" onclick="chongzhi()">购 买</a></td>
+      </tr>
+    </table>
+    <div class="gmxz_tip"> 购买须知：   
+      <p> 本次服务购买后即生效，不支持退费服务。</p>
+    </div>
+    
+    <!--内容结束------------------------------> 
+  
+</div>
+</body>
+</html>

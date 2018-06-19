@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>专家信息修改</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body onLoad="uname1()">
+        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                        <i class="fa fa-lock fa-lg"></i>
+                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                                </div>
+                                <div class="form-group" >
+                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                                </div>
+                                <div class="form-group col-md-offset-9">
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+<div>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header" style="margin-left:20%">
+        <a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    </div>
+    <div style="margin-right:10%">
+        <ul class="nav navbar-nav navbar-left">  
+            <li><a href="main.html">主页</a></li>
+            <li><a href="expert_search.html">成果搜索</a></li>
+            <li><a href="register.html">加入我们</a></li>
+            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="#" onclick="exchange()">物品换取</a></li>
+	    <li><a href="#" onclick="mmail()">站内信</a></li>	
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown navbar-right">
+            <a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> 
+                     <span class="caret"></span>
+            </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+</div>
+<div class="row"> 
+        <!--为3的栅格系统，相对于一行放四个--> 
+        <div> 
+            <h2 style="text-align:center">专家信息修改</h2> 
+            <div class="col-sm-6">
+        <div style="margin-left:100px">
+        <h2>个人信息修改</h2>
+            <p>姓名：
+    <input type="text" class="form-control" id="name" placeholder="name" style="width:300px"></p> 
+            <p>email：
+            <input type="text" class="form-control" id="email" placeholder="email" style="width:300px"></p>
+            <p>领域：
+            <input type="text" class="form-control" id="field" placeholder="field" style="width:400px"></p>
+            <p>工作单位：
+            <input type="text" class="form-control" id="institution" placeholder="institution" style="width:400px"></p> 
+            <p>简介：
+            <input type="text" class="form-control" id="introducation" placeholder="introducation" style="width:400px"></p>
+            <p>其他成就：
+            <input type="text" class="form-control" id="otherAchievement" placeholder="otherAchievement" style="width:400px"></p>
+            </br>
+            <p><a href="#" class="btn btn-success" role="button" onClick="Change()">提交修改</a></p>   
+        </div>
+         </div>
+         <div class="col-sm-6"> 
+            <!-------------------------标签页开始----------------------------->
+          <div>
+              <div class="row">
+                  <h2 style="margin-left:10px">学术成果修改</h2>
+              </div>
+              <!-- Nav tabs页签 -->
+              <ul class="nav nav-tabs" role="tablist">
+                  <!--注意这里的#home与下面的div role="tabpanel" class="tab-pane active" id="home" 的id对应实现页签-->
+                  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">科研项目</a></li>
+                  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">科研论文</a></li>
+                  <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">科技专利</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                  <!--active当前选中项-->
+                  <div role="tabpanel" class="tab-pane active" id="home">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科研项目</h3>
+                              <textarea class="form-control" placeholder="project" id="project" name="project" autofocus rows="10" cols="40"></textarea>
+                              <p style="font-size:14px"></p> 
+                          </div>
+                      </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="profile">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科研论文</h3>
+                              <textarea class="form-control" placeholder="title" id="title" name="title" autofocus rows="1" cols="40"></textarea></br>
+                              <textarea class="form-control" placeholder="url" id="url" name="url" autofocus rows="1" cols="40"></textarea>
+                              <p style="font-size:14px"></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="messages">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科技专利</h3>
+                              <textarea class="form-control" placeholder="patent" id="patent" name="patent" autofocus rows="10" cols="40"></textarea>
+                              <p style="font-size:14px"></p>
+                          </div>
+                      </div>
+                  </div>
+                  
+              </div>
+
+          </div>
+          <!-------------------------标签页结束----------------------------->
+        </div> 
+        </div> 
+        
+</div>
+<script type='text/javascript'>
+var url="http://39.107.106.211:8081";
+function Change()
+		{
+			var val1 = document.getElementById("name").value;
+			var val2 = document.getElementById("email").value;
+			var val3 = document.getElementById("field").value;
+			var val4 = document.getElementById("institution").value;
+			var val5 = document.getElementById("introducation").value;
+			var val6 = document.getElementById("otherAchievement").value;
+			var val7 = document.getElementById("project").value;
+			var val8 = document.getElementById("patent").value;
+			var val9 = document.getElementById("title").value;
+			var val10 = document.getElementById("url").value;
+			var expertchange = {
+				"name":val1,
+				"user.email":val2,
+				"field":val3,
+				"institution":val4,
+				"introducation":val5,
+				"otherAchievement":val6,
+				"project":val7,
+				"patent":val8,
+				"user":{
+					"email":val2
+				}
+			}
+			var achievementchange = {
+				"paper":{
+				"title":val9,
+				"url":val10
+				}
+			}
+			expertchange = JSON.stringify(expertchange);
+			achievementchange = JSON.stringify(achievementchange);
+			var settings = {
+				type: "PUT",
+			    url:url+"/expert/1",
+			    data:expertchange,
+			    error: function(XHR,textStatus,errorThrown) {
+			        alert("error!");
+			    },
+			    success: function(data,textStatus) {
+					if(data==false)
+					{
+						alert("修改失败！");
+					}
+					else
+					{
+						alert("修改成功！");
+						location.reload();
+					}
+			    },
+			    headers: {
+			        "Content-Type":"application/json"
+			    }
+			};
+			$.ajax(settings);
+			var settings = {
+				type: "PUT",
+			    url:url+"/expert-paper/1",
+			    data:achievementchange,
+			    error: function(XHR,textStatus,errorThrown) {
+			        alert("error!");
+			    },
+			    success: function(data,textStatus) {
+					if(data==false)
+					{
+						alert("修改失败！");
+					}
+					else
+					{
+						alert("修改成功！");
+						location.reload();
+					}
+			    },
+			    headers: {
+			        "Content-Type":"application/json"
+			    }
+			};
+			$.ajax(settings);
+		}
+		
+</script>					
+</body>
+    <script type='text/javascript'>
+    	//var btn = document.getElementById('btn');
+        //    btn.addEventListener('mouseclick',do)
+		function doPost()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var val3 = document.getElementById("repassword").value;
+			var user = {
+        	"nickname":val1,
+        	"password":val2
+        	}
+			user = JSON.stringify(user);
+        	var settings = {
+			        type: "POST",
+			        url:url+"/users",
+			        data:user,
+			        error: function(XHR,textStatus,errorThrown) {
+			            alert("error!");
+			        },
+			        success: function(data,textStatus) {
+			            alert(data);
+						if(data==false)
+						{
+							alert("该昵称已被注册！");
+						}
+						else
+						{
+							alert("注册成功！");
+							window.location.href='login.html';
+							//var cookie="userId="+data;
+							//alert("sss");
+							//document.cookie = cookie;
+						}
+			        },
+			        headers: {
+			            "Content-Type":"application/json"
+			        }
+			        
+			};
+			//var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			if(val1=="")
+			{
+				alert("昵称不能为空！");
+			}
+			else if(val2=="")
+			{
+				alert("密码不能为空！");
+			}
+			else if(val2!=val3)
+			{
+				alert("两次输入密码不相同！");
+			}
+			else
+			{
+				 $.ajax(settings);
+			}
+		}
+		function loginShow()
+        {
+            $('#llogin').modal();
+        }
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="main.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var a=checkName();
+			$("#uname").append(a);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				document.getElementById("lin").href="#";
+				document.getElementById("lout").href="";
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				document.getElementById("lin").href="";
+				document.getElementById("lout").href="#";
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function clearall() {  
+   		 setCookie("userId", "", -1);
+		 location.reload();
+		}  
+		function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + "; " + expires;
+	    }
+		function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="mailbox.html";
+			}
+		}	
+    </script>
+</html>

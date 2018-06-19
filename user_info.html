@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="multipart/form-data;         charset=utf-8" />
+	<meta charset="utf-8"> 
+	<title>用户信息</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body onLoad="uname1()">
+        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                                </div>
+                                <div class="form-group" >
+                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                                </div>
+                                <div class="form-group col-md-offset-9">
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+        <div class="modal fade" id="topro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">专家认证</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="proname" class="col-sm-2 control-label">专家姓名:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required"  type="text" placeholder="proname" id="proname" name="proname" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="field" class="col-sm-2 control-label">研究领域:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required"  type="text" placeholder="field" id="field" name="field" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="institution" class="col-sm-2 control-label">所属机构:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required"  type="text" placeholder="institution" id="institution" name="institution" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="patent" class="col-sm-2 control-label">拥有专利:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required" type="text" placeholder="patent" id="patent" name="patent" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="project" class="col-sm-2 control-label">项目:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required" type="text" placeholder="project" id="project" name="project" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="otherachievement" class="col-sm-2 control-label">其余成就:</label>
+                                    <div class="col-sm-9">
+                                    <input class="form-control required" type="text" placeholder="otherachievement" id="otherachievement" name="otherachievement" autofocus maxlength="20"/>
+                                    </div>
+                                </div>
+                                <form id="infile"  method="post" enctype="multipart/form-data" class="form-group" style="margin-left:7px">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <label for="inputfile">文件输入</label>
+                                    <input type="file" name="file" id="infile">
+                                	<br>
+                                    <i class="fa fa-lock fa-lg"></i>
+                                </form>
+                                <div class="form-group col-md-offset-9" style="margin-left:7px">
+                                    <button type="submit" class="btn btn-success" onclick="proPost()">确认认证</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+<div>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header" style="margin-left:20%">
+        <a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    </div>
+    <div style="margin-right:10%">
+        <ul class="nav navbar-nav navbar-left">  
+            <li><a href="main.html">主页</a></li>
+            <li><a href="expert_search.html">成果搜索</a></li>
+            <li><a href="register.html">加入我们</a></li>
+            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="#" onclick="exchange()">物品换取</a></li>
+	    <li><a href="#" onclick="mmail()">站内信</a></li>	
+        </ul>s
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown navbar-right">
+            <a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> 
+                     <span class="caret"></span>
+            </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+                            <li class="divider"></li>
+            <li>
+                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+</div>
+					<div class="modal-body" style="margin-left:25%">
+							<div class="col-md-6" style="margin:opx auto">
+                            	<br>
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <label for="username1" class="col-sm-2 control-label">昵称：</label>
+                                    <div class="col-sm-10">
+                                    <li id="nickname" autofocus maxlength="20"></li>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="form-group">
+                                	<i class="fa fa-user fa-lg"></i>
+                                    <label for="password1" class="col-sm-2 control-label">真实姓名：</label>
+                                    <div class="col-sm-10">
+                                    <li id="rname" autofocus maxlength="20"></li>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="form-group">
+                                	<i class="fa fa-user fa-lg"></i>
+                                    <label for="repassword1" class="col-sm-2 control-label">email：</label>
+                                    <div class="col-sm-10">
+                                    <li id="mail" autofocus maxlength="20"></li>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="form-group">
+                                	<i class="fa fa-user fa-lg"></i>
+                                    <label for="repassword1" class="col-sm-2 control-label">积分：</label>
+                                    <div class="col-sm-10">
+                                    <li id="point" autofocus maxlength="20"></li>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                 <div class="form-group col-md-offset-2">
+                                    <button id='btn' type="submit" class="btn btn-primary btn-lg btn-block" name="submit" onclick="topro()">专家认证</button>
+                                </div>
+                            </div>
+					</div>
+</body>
+    <script type='text/javascript'>
+	var url="http://39.107.106.211:8081";
+    	//var btn = document.getElementById('btn');
+        //    btn.addEventListener('mouseclick',do)
+		function loginShow()
+        {
+            $('#llogin').modal();
+        }
+		function topro()
+		{
+			 $('#topro').modal();
+		}
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="register.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var sss=check();
+			var a=checkName();
+			$("#uname").append(a);
+			var b=checkRname();
+			$("#rname").append(b);
+			var c=checkMail();
+			$("#mail").append(c);
+			var d=checkPoint();
+			$("#point").append(d);
+			var e=checkNname();
+			$("#nickname").append(e);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function checkNname(){
+			var username=getCookie("userId");
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/userInformation?userId="+username,function(data,status){
+				c=data['user']['nickname']
+				//alert(c);
+			});
+			return c;
+		}
+		function checkRname(){
+			var username=getCookie("userId");
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/userInformation?userId="+username,function(data,status){
+				c=data['user']['name']
+				//alert(c);
+			});
+			return c;
+		}
+		function checkMail(){
+			var username=getCookie("userId");
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/userInformation?userId="+username,function(data,status){
+				c=data['user']['email']
+				//alert(c);
+			});
+			return c;
+		}
+		function checkPoint(){
+			var username=getCookie("userId");
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/userInformation?userId="+username,function(data,status){
+				c=data['user']['point']
+				//alert(c);
+			});
+			return c;
+		}
+		//function check
+		function check(){
+			var username=getCookie("userId");
+			$.get(url+"/userInformation?userId="+username,function(data,status){
+				//var d = JSON.parse(data);
+				//alert(data);\
+				var e=data['identity'];
+				/*if(e==2)
+				{
+					window.location.href="专家个人展示页面";
+				}*/
+				//alert(data);
+			});
+		}
+		function proPost()
+		{
+			var uid=getCookie("userId");
+			document.getElementById('infile').action=url+"/admin/apply/certifiedExpert/upload/"+uid;
+			$("#infile").submit();
+			var v1 = document.getElementById("proname").value;
+            var v2 = document.getElementById("field").value;
+			var v3 = document.getElementById("institution").value;
+			var v4 = document.getElementById("patent").value;
+			var v5 = document.getElementById("project").value;
+			var v6 = document.getElementById("otherachievement").value;
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			var user1= {
+        	"name":v1,
+        	"intitution":v3,
+			"field":v2,
+			"project":v5,
+			"patent":v4,
+			"otherAchievement":v6
+        	}
+			user1 = JSON.stringify(user1);
+        	var settings = {
+			        type: "POST",
+			        url:url+"/admin/apply/certifiedExpert/"+uid,
+			        data:user1,
+			        error: function(XHR,textStatus,errorThrown) {
+			            alert("error!");
+						window.location.href='user_info.html';
+			        },
+			        success: function(data,textStatus) {
+						if(data==false)
+						{
+							alert("上传失败！");
+							window.location.href='user_info.html';
+						}
+						else
+						{
+							alert("上传成功！");
+							window.location.href='user_info.html';
+							//window.location.href='register.html';
+							//var cookie="userId="+data;
+							//alert("sss");
+							//document.cookie = cookie;
+						}
+			        },
+			        headers: {
+			            "Content-Type":"application/json"
+			        }
+			        
+			};
+			if(v1=="")
+			{
+				alert("请填写专家姓名！");
+			}
+			else if(v2=="")
+			{
+				alert("请填写研究领域！");
+			}
+			else if(v3=="")
+			{
+				alert("请填写所属机构！");
+			}
+			else
+			{	
+			$.ajax(settings);
+			}
+		}
+				function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="mailbox.html";
+			}
+		}	
+		function uinfo(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="user_info.html";
+			}
+		}	
+    </script>
+</html>

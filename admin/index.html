@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>后端管理系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+
+    <!-- Custom CSS -->
+    <link href="../css/sb-admin-2.css" rel="stylesheet">
+
+
+    <!-- Custom Fonts -->
+    <link href="../css/font-awesome.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="modal fade" id="applycheck" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="margin-top:40%">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="myModalLabel">处理申请</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal col-md-offset-0" id="login_form">
+                    <div class="row">
+                        用户id：<span id="apply_user_id"></span>
+                    </div>
+                    <div class="row">
+                        用户昵称：<span id="apply_user_nickname"></span>
+                    </div>
+                    <div class="row">
+                        专家id：<span id="apply_expert_id"></span>
+                    </div>
+                    <div class="row">
+                        专家姓名：<span id="apply_expert_name"></span>
+                    </div>
+                    <div class="row">
+                        所在组织：<span id="apply_expert_institution"></span>
+                    </div>
+                    <div class="row">
+                        证明文件：<a id="apply_url" href="#">下载链接</a>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-success" id="acceptApply" style="padding-left: 10px" onclick="acceptApply()">同意申请</button>
+                        <button class="btn" id="declineApply" style="padding-left: 10px" onclick="declineApply()">残忍拒绝</button>
+                    </div>                   
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">后端管理系统</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="../login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> 主页</a>
+                        </li>
+                        
+                        <li>
+                            <a href="ManageExperts.html"><i class="fa fa-table fa-fw"></i> 管理专家</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">数据展示</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-graduation-cap fa-5x" aria-hidden="true"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge" id="experts_count"> </div>
+                                    <div>Experts!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#experts_chart">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge" id="paper_count"> </div>
+                                    <div>Paper!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#experts_chart">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-shopping-cart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">124</div>
+                                    <div>Orders!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#order_chart">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-bell-o fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge" id="apply_count"> </div>
+                                    <div>Unfilled Authorizations!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#notices">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+
+                    <div class="panel panel-default">
+                        
+                        <!-- /.panel-heading -->
+                        <div class="panel-body" id="experts_chart">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <h2 class="page-header">专家信息</h2>
+                                </div>
+                                <!-- /.col-lg-12 -->
+                            </div>
+                            <div class="row">
+
+                                <div class="col-lg-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            专家数据表
+                                        </div>
+                                        <!-- /.panel-heading -->
+                                        <div class="panel-body">
+                                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                <thead>
+                                                    <tr>
+                                                        <th>专家id</th>
+                                                        <th>专家名称</th>
+                                                        <th>用户id</th>
+                                                        <th>用户名称</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.panel-body -->
+                                    </div>
+                                    <!-- /.panel -->
+                                </div>
+                                <!-- /.col-lg-12 -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="row">
+                            <div class="col-md-10">
+                            <a href="ManageExperts.html" class="btn btn-default btn-block">查看全部</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4" id="notices">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i>待处理请求
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group" id="applylist">
+                                
+                            </div>
+                            <!-- /.list-group -->
+                            
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <script type="text/javascript">
+        var url="http://39.107.106.211:8081/";
+        var matchdata;
+        var certifydata;
+        var isMatch=true;
+        var currentId=-1;
+
+        window.onload=function(){
+            //alert("aaa");
+            getExpertsCount();
+            getApplyCount();
+            getPaperCount();
+            getMatchApply();
+            getCeritfyApply();
+            getAllExperts();
+
+            var table=$('#dataTables-example').DataTable({
+                searching: false,
+                dom: 'Bfrtip',
+                select: true,
+                pageLength: 20,
+                pagingType: 'simple',
+                info:false
+                
+            });
+        }
+
+        function getExpertsCount()
+        {
+            $.get(url+"expert/count",function(data)
+            {
+                //alert(data);
+                if(data==0)
+                {
+                    alert("获取专家数量错误");
+                }
+                else
+                {
+                    //alert(data);
+                    document.getElementById("experts_count").innerHTML=data;
+                }
+            }); 
+        }
+
+        function getApplyCount()
+        {
+            var count=0;
+            $.get(url+"admin/matchcount",function(data)
+            {
+                if(data==0)
+                {
+                    alert("获取申请数量错误");
+                }
+                else
+                {
+                    //alert(data);
+                    count=count+data;
+                }
+            }); 
+            $.get(url+"admin/certifycount",function(data)
+            {
+                //alert(count);
+
+                if(data==0)
+                {
+                    alert("获取申请数量错误");
+                }
+                else
+                {
+                    //alert(data+"条未处理请求！");
+
+                    count=count+data;
+                    alert(data+"条未处理请求！");
+                    document.getElementById("apply_count").innerHTML=count;
+                }
+            }); 
+        }
+
+        function getPaperCount()
+        {
+            $.get(url+"paper/all/count",function(data)
+            {
+                //alert(data);
+                if(data==0)
+                {
+                    alert("获取论文数量错误");
+                }
+                else
+                {
+                    //alert(data);
+                    document.getElementById("paper_count").innerHTML=data;
+                }
+            }); 
+        }
+
+        function getMatchApply(){
+            $.get(url+"admin/matchapply",function(data)
+            {
+                //alert(data);
+                if(data==0)
+                {
+                    alert("获取match申请错误");
+                }
+                else
+                {
+                    //alert(data);
+                    var parent = document.getElementById("applylist");
+                    matchdata=data;
+                    for(var i=0;i<data.length;i++)
+                    {
+                        var newbar=document.createElement("a");
+                        newbar.setAttribute("id","matchapply"+data[i].applyId);
+                        newbar.setAttribute("class","list-group-item");
+                        newbar.setAttribute("onClick","matchApplyShow("+i+")");
+
+                        var s="认领请求，来自"+data[i].user.nickname;
+                        newbar.append(s);
+                        parent.appendChild(newbar);
+                    }
+                }
+            }); 
+        }
+
+        function getCeritfyApply(){
+            $.get(url+"admin/certifyapply",function(data)
+            {
+                //alert(data);
+                if(data==0)
+                {
+                    alert("获取match申请错误");
+                }
+                else
+                {
+                    //alert(data);
+                    var parent = document.getElementById("applylist");
+                    certifydata=data;
+                    for(var i=0;i<data.length;i++)
+                    {
+                        var newbar=document.createElement("a");
+                        newbar.setAttribute("id","certifyapply"+data[i].applyId);
+                        newbar.setAttribute("class","list-group-item");
+                        newbar.setAttribute("onClick","certifyApplyShow("+i+")");
+
+                        var s="认证请求，来自"+data[i].user.nickname;
+                        newbar.append(s);
+                        parent.appendChild(newbar);
+                    }
+                }
+            }); 
+        }
+
+
+        function matchApplyShow(index)
+        {
+            //alert(applyId);
+            document.getElementById("apply_user_id").innerHTML=matchdata[index].user.userId;
+            document.getElementById("apply_user_nickname").innerHTML=matchdata[index].user.nickname;
+            document.getElementById("apply_expert_id").innerHTML=matchdata[index].expert.expertId;
+            document.getElementById("apply_expert_name").innerHTML=matchdata[index].expert.name;
+            document.getElementById("apply_expert_institution").innerHTML=matchdata[index].expert.institution;
+            document.getElementById("apply_url").setAttribute("href",matchdata[index].downloadUrl);
+            isMatch=true;
+            currentId=matchdata[index].applyId;
+            $('#applycheck').modal();
+        }
+
+        function certifyApplyShow(index)
+        {
+            //alert(applyId);
+            document.getElementById("apply_user_id").innerHTML="认证专家";
+            document.getElementById("apply_user_nickname").innerHTML="认证专家";
+            document.getElementById("apply_expert_id").innerHTML="认证专家";
+            document.getElementById("apply_expert_name").innerHTML=certifydata[index].name;
+            document.getElementById("apply_expert_institution").innerHTML=certifydata[index].institution;
+            document.getElementById("apply_url").setAttribute("href",certifydata[index].downloadUrl);
+            isMatch=false;
+            currentId=certifydata[index].applyId;
+            $('#applycheck').modal();
+        }
+
+        function acceptApply(){
+            if(currentId==-1)alert("error!");
+            if(isMatch){
+                $.get(url+"admin/apply/matchaccept/"+currentId,function(data){
+                    if(data==true){
+                        alert("上传成功！");
+                        window.location.href="index.html";
+                    }
+                });
+            }else{
+                $.get(url+"admin/apply/certifyaccept/"+currentId,function(data){
+                    if(data==true){
+                        alert("上传成功！");
+                        window.location.href="index.html";
+                    }
+                });
+            }
+            
+        }
+
+        function declineApply(){
+            if(currentId==-1)alert("error!");
+            if(isMatch){
+                $.get(url+"admin/matchreject/"+currentId,function(data){
+                    if(data==true){
+                        alert("上传成功！");
+                        window.location.href="index.html";
+                    }
+                });
+            }else{
+                $.get(url+"admin/certifyreject/"+currentId,function(data){
+                    if(data==true){
+                        alert("上传成功！");
+                        window.location.href="index.html";
+                    }
+                });
+            }
+        }
+
+        function getAllExperts(){
+        var table = $('#dataTables-example');
+        $.get(url+"expert/all?page="+0+"&size="+1000,function(data){
+            for(var i=0;i<1000;i++)
+            {
+                var eid=data[i].expertid;
+                var name=data[i].name;
+                var uid;
+                var nickname;
+                if (!data[i].user){uid="暂无用户";}
+                else {
+                    uid=data[i].user.userId;
+                }
+                if(!data[i].user){
+                    nickname="暂无用户";
+                }
+                else{
+                    nickname=data[i].user.nickname;
+                }
+                table.row.add([eid,name,uid,nickname]).draw();
+            }
+        });
+    }
+    </script>
+    </script>
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/sb-admin-2.js"></script>
+    <script src="../js/jquery.dataTables.min.js"></script>
+    <script src="../js/dataTables.bootstrap.min.js"></script>
+    <script src="../js/dataTables.responsive.js"></script>
+    <script type="text/javascript" src="../js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="../js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.print.min.js"></script>
+
+    
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

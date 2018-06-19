@@ -1,0 +1,414 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>专家信息展示</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body onLoad="uname1()">
+<div class="modal fade" id="claimpage" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="text-align:center">
+                    <h4>专家认证文件提交</h4>
+                    </div>
+                    <div class="modal-body">
+                    <form id="infile" action="http://127.0.0.1:8081/admin/apply/matchExpert?expertId=47&userId=2" method="POST" enctype="multipart/form-data" class="form-group">
+                    <label for="inputfile">认证文件1</label>
+                                    <input type="file" name="file" id="upfile1">
+                                	<br>
+                       <label for="inputfile">认证文件2</label>
+                                    <input type="file" name="file" id="upfile2">
+                                	<br> 
+                       <label for="inputfile">认证文件3</label>
+                                    <input type="file" name="file" id="upfile3">
+                                	<br>
+                       <button id='btn' type="submit" class="btn btn-success" name="submit">上传文件</button>							               			</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            	<div class="modal-content" style="margin-top:40%">
+                	<div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                    </div>
+        			<div class="modal-body">
+           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
+                			<div class="col-md-12">
+                    			<div class="form-group">
+                        			<i class="fa fa-user fa-lg"></i>
+                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                                </div>
+                                <div class="form-group">
+                                        <i class="fa fa-lock fa-lg"></i>
+                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                                </div>
+                                <div class="form-group" >
+                                    <font color="#999999">还没有账号？</font><a href="../../Documents/Tencent Files/326103703/FileRecv/register.html" color="#CCCC00">前往注册</a>
+                                </div>
+                                <div class="form-group col-md-offset-9">
+                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+    			</div>
+            </div>
+        </div>
+<div>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header" style="margin-left:20%">
+        <a class="navbar-brand" href="main.html">科学专家资源共享平台</a>
+    </div>
+    <div style="margin-right:10%">
+        <ul class="nav navbar-nav navbar-left">  
+            <li><a href="main.html">主页</a></li>
+            <li><a href="expert_search.html">成果搜索</a></li>
+            <li><a href="register.html">加入我们</a></li>
+            <li><a href="charge/charge.html" onclick="charge()">充值</a></li>
+            <li><a href="charge/exchange.html" onclick="exchange()">物品换取</a></li>
+	    <li><a href="mail_sender.html" onclick="mmail()">站内信</a></li>	
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown navbar-right">
+            <a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> 
+                     <span class="caret"></span>
+            </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+                <li class="divider"></li>
+            <li>
+                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+        </ul>
+        </li>
+        </ul>
+    </div>
+    </div>
+</nav>
+</div>
+<div class="row"> 
+        <!--为3的栅格系统，相对于一行放四个--> 
+        <div class="col-sm-6">
+        <div style="margin-left:10px"> 
+            <h2>专家个人信息展示</h2> 
+            <p>姓名：<span id='name'></span></p> 
+            <p>领域：<span id='field'></span></p>
+            <p>工作单位：<span id='institution'></span></p> 
+            <p>简介：<span id='introducation'></span></p>
+            <p>其他成就：<span id='otherAchievement'></span></p>   
+            <p><button class="btn btn-success" onClick="to_modify()">修改信息</button></p>
+            <p><a href="#" class="btn btn-success" role="button" id="claim">认领专家</a></p>  
+        </div>
+        </div> 
+        <div class="col-sm-6"> 
+            <!-------------------------标签页开始----------------------------->
+          <div>
+              <div class="row">
+                  <h2 style="margin-left:10px">专家学术成果展示</h2>
+              </div>
+              <!-- Nav tabs页签 -->
+              <ul class="nav nav-tabs" role="tablist">
+                  <!--注意这里的#home与下面的div role="tabpanel" class="tab-pane active" id="home" 的id对应实现页签-->
+                  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">科研项目</a></li>
+                  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">科研论文</a></li>
+                  <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">科技专利</a></li>
+              </ul>
+
+              <!-- Tab panes -->
+              <div class="tab-content">
+                  <!--active当前选中项-->
+                  <div role="tabpanel" class="tab-pane active" id="home">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科研项目</h3>
+                              <div id='project'></div>
+                              <p style="font-size:14px"></p> 
+                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="profile">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科研论文</h3>
+                              <div id='title'></div>
+                              <a id='url' href= "#" onClick="url_transition()"></a>
+                              <p style="font-size:14px"></p>
+                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                          </div>
+                      </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="messages">
+                      <div class="row">
+                          <div class="col-sm-8">
+                              <h3>科技专利</h3>
+                              <div id='patent'></div>
+                              <p style="font-size:14px"></p>
+                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                          </div>
+                      </div>
+                  </div>
+                  
+              </div>
+
+          </div>
+          <!-------------------------标签页结束----------------------------->
+        </div> 
+</div>
+<script type="text/javascript">
+var url="http://39.107.106.211:8081";
+function parseUrl()
+		{
+        	var url=location.href;
+            var i=url.indexOf('?');
+            if(i==-1)return;
+            var querystr=url.substr(i+1);
+            var arr1=querystr.split('&');
+            var arr2=new Object();
+            for(i in arr1){
+                var ta=arr1[i].split('=');
+                arr2[ta[0]]=ta[1];
+            }
+            return arr2;
+        }
+var v = parseUrl();
+var EId = v['expertId'];
+//var val=getCookie(expertId);
+//document.getElementById('infile').action=url+"/expert/e_id/"+val;
+//$("#infile").submit();
+    $.get(url+"/expert/e_id/"+EId,function(data){
+document.getElementById("name").innerHTML=data.name
+document.getElementById("field").innerHTML=data.field
+document.getElementById("institution").innerHTML=data.institution
+document.getElementById("introducation").innerHTML=data.introducation
+document.getElementById("otherAchievement").innerHTML=data.otherAchievement
+document.getElementById("project").innerHTML=data.project
+document.getElementById("patent").innerHTML=data.patent
+	});
+	$.get(url+"/expert-paper/"+EId,function(data){
+document.getElementById("title").innerHTML=data[0].paper.title
+var theurl=document.getElementById("url").innerHTML=data[0].paper.url
+
+	});
+	//theurl = JSON.stringify(theurl);
+//	function url_transition(){
+	//	window.open="theurl"
+		//}
+		function to_search_achievement(){
+			window.location="search_achievement.html?expertId="+EId
+			}
+			function to_modify(){
+			window.location="modify_expert_info.html?expertId="+EId
+			}
+</script>
+<script type='text/javascript'>
+$(document).ready(function() {
+    document.getElementById("claim").onclick = function() {
+        $('#claimpage').modal('show');
+    }
+});
+</script>
+<script type="text/javascript">
+</script>					
+</body>
+    <script type='text/javascript'>
+    	//var btn = document.getElementById('btn');
+        //    btn.addEventListener('mouseclick',do)
+		function doPost()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var val3 = document.getElementById("repassword").value;
+			var user = {
+        	"nickname":val1,
+        	"password":val2
+        	}
+			user = JSON.stringify(user);
+        	var settings = {
+			        type: "POST",
+			        url:url+"/users",
+			        data:user,
+			        error: function(XHR,textStatus,errorThrown) {
+			            alert("error!");
+			        },
+			        success: function(data,textStatus) {
+			            alert(data);
+						if(data==false)
+						{
+							alert("该昵称已被注册！");
+						}
+						else
+						{
+							alert("注册成功！");
+							window.location.href='login.html';
+							//var cookie="userId="+data;
+							//alert("sss");
+							//document.cookie = cookie;
+						}
+			        },
+			        headers: {
+			            "Content-Type":"application/json"
+			        }
+			        
+			};
+			//var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			if(val1=="")
+			{
+				alert("昵称不能为空！");
+			}
+			else if(val2=="")
+			{
+				alert("密码不能为空！");
+			}
+			else if(val2!=val3)
+			{
+				alert("两次输入密码不相同！");
+			}
+			else
+			{
+				 $.ajax(settings);
+			}
+		}
+		function loginShow()
+        {
+            $('#llogin').modal();
+        }
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="register.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var a=checkName();
+			$("#uname").append(a);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				document.getElementById("lin").href="#";
+				document.getElementById("lout").href="";
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				document.getElementById("lin").href="";
+				document.getElementById("lout").href="#";
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function clearall() {  
+   		 setCookie("userId", "", -1);
+		 location.reload();
+		}  
+		function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + "; " + expires;
+	    }
+		function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge/exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="alter/Mail.html";
+			}
+		}	
+		function uinfo(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="userinfo.html";
+			}
+		}	
+    </script>
+</html>

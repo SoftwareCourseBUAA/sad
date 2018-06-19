@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>Letter's Zone</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <script>
+			function checkName(){
+				var url=location.search;
+				var theRequest=new Object();
+				if(url.indexOf('?')!=-1){
+					var str=url.substr(1);
+					var strs=str.split("&");
+					for ( var i = 0; i < strs.length; i++ ) {
+    					theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+ 					}
+					var id=theRequest['userId'];
+					$.get("http://f09e0926.ngrok.io/nickname?userId="+id,function(data,status){
+						document.getElementById("nameTag").innerHTML=data;
+						sender=data;
+					});
+  					return theRequest['userId'];
+				}
+			}
+			function Write(){
+				var name=checkName();
+			}
+	</script>
+</head>
+<body onLoad="Write()">
+	<p class="label label-info" id="nameTag"></p>
+    <form role="form">
+    	<h2><span class="label label-default"> Writing Your Letter  Now</span></h2>
+    	<div class="form-group">
+        	<label for="name">Receiver_Name:</label>
+            <input type="text" class="form-control" id="receiver_name" placeholder="PleaseEnterName" required>
+           <label for="thee">Theme:</label>
+            <input type="text" class="form-control" id="theme" placeholder="Please Enter the Theme" required>
+            <label for="Content">Content:</label>
+            <br>
+            <textarea rows="10" cols="200" id="content" placeholder="Please Enter the Content"></textarea>
+        </div>
+        <script>
+		function getCurDate()
+		{
+ 			var d = new Date();
+			var week;
+ 			switch (d.getDay()){
+ 			case 1: week="星期一"; break;
+ 			case 2: week="星期二"; break;
+			case 3: week="星期三"; break;
+ 			case 4: week="星期四"; break;
+ 			case 5: week="星期五"; break;
+ 			case 6: week="星期六"; break;
+ 			default: week="星期天";
+		 	}
+ 			var years = d.getFullYear();
+ 			var month = add_zero(d.getMonth()+1);
+			var days = add_zero(d.getDate());
+ 			var hours = add_zero(d.getHours());
+ 			var minutes = add_zero(d.getMinutes());
+			var seconds=add_zero(d.getSeconds());
+ 			var ndate = years+"年"+month+"月"+days+"日 "+hours+":"+minutes+":"+seconds+" "+week;
+ 			divT.innerHTML= ndate;
+		}
+		function add_zero(temp)
+		{
+ 			if(temp<10) return "0"+temp;
+ 			else return temp;
+		}
+		setInterval("getCurDate()",100);
+		</script>
+		<label for="Time">Present Time：</label>
+		<div id="divT"></div>
+       
+    </form>
+    <button class="btn btn-default btn-danger" onClick="sendPost()">Send</button> 
+     <script type="text/javascript">
+	function sendPost()
+	{
+		var id=checkName();
+		var receiver_name=document.getElementById("receiver_name").value;
+        var con_tent=document.getElementById("content").value;
+        var th_eme=document.getElementById("theme").value;
+		var user={
+			"sender":sender,
+			"receiver":receiver_name,
+			"content":con_tent,
+			"theme":th_eme
+		}
+		user = JSON.stringify(user);
+        $.ajax({
+			    type:'POST',
+			    url:'http://f09e0926.ngrok.io/communicationMessage',
+			    data:user,
+				async:false,
+				dataType:"json",
+				contentType:"application/json",
+				/*headers:{
+					contentType:"application/json"
+				},*/
+				error: function(data){
+					alert("fail");
+				},
+				success: function(data){
+					alert("succeed");
+				}
+		});
+		window.location.reload();
+	}
+	</script>
+</body>
+</html>
+
+<!--function sendPost(){
+		var receiver=document.getElementById("receiver_name").value;
+		var theme=document.getElementById("theme").value;
+		var content=document.getElementById("content").value;
+			var res={
+				"sender":sender,
+				"receiver":receiver,
+				"content":content,
+				"theme":theme
+			};
+			result=JSON.stringify(res);
+			$.post("http://34441dba.ngrok.io/communicationMessage",result,
+			function(data,status){
+				alert("Status:\n"+status);
+			},
+			"json"
+			);
+		}-->

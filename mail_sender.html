@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<title>As Senders:</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <!--
+    <script type="text/javascript">
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return ""
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			$.get("https://d2a6c951.ngrok.io/nickname?userId="+username,function(data,status){
+				username=data;
+			});
+			document.getElementById("oh_name").innerHTML=username;
+			return username;
+		}
+    </script>
+    -->
+    <script>
+			function checkName(){
+				var url=location.search;
+				var theRequest=new Object();
+				if(url.indexOf('?')!=-1){
+					var str=url.substr(1);
+					var strs=str.split("&");
+					for ( var i = 0; i < strs.length; i++ ) {
+    					theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+ 					}
+					var id=theRequest['userId'];
+					$.get("http://f09e0926.ngrok.io/nickname?userId="+id,function(data,status){
+						document.getElementById("oh_name").innerHTML=data;
+					});
+  					return theRequest['userId'];
+				}
+			}
+	</script>
+</head>
+<body onLoad="ShowData()">
+	
+    <div class="container">
+    	<div class="row">
+        	<label class="label label-default" id="oh_name"></label>
+        	<h2>The Letters You've Sended:<span class="label label-default">-_-</span></h2>
+            <button class="btn btn-default" onClick="Go()">Click here</button> 
+            <script>
+				function Go(){
+					var id=checkName();
+					window.location.href="Mail.html?userId="+id;
+				}
+			</script>
+            <p id="start">to show the letters you've received</p>
+            <button class="btn btn-default" onClick="GoToWrite()">Write Letters</button>
+            <script>
+				function GoToWrite(){
+					var id=checkName();
+					window.location.href="write.html?userId="+id;
+				}
+			</script>
+         	<!--
+            <div class="panel panel-default">
+            	<div class="panel-heading">
+                	<h3 class="panel-title">Title</h3>
+                 </div>
+                 <div class="panel-body">
+                 	haha,content
+                 </div>
+            </div>
+      		-->
+            <script>
+				function ShowData(){
+					var nickname=checkName();
+					$.get("http://f09e0926.ngrok.io/message/sender?userId="+nickname,function(data,status){
+						var startState=document.getElementById("start");
+						if(data.length==0){
+							var sad=document.createElement("p");
+							sad.innerHTML="You've sended no letters";
+							startState.appendChild(sad);
+						}
+						else{
+							/*
+							for(var i=0;i<data.length;i++){
+								var div_panel=document.createElement("div");
+								div_panel.className='panel panel-default';
+								var div_head=document.createElement("div");
+								div_head.className='panel panel-heading';
+								var name_h=document.createElement("h3");
+								name_h.className='panel_title';
+								name_h.innerHTML=data[i]['receiver']['nickname'];
+								var div_body=document.createElement("div");
+								div_body.className='panel panel-body';
+								var content=document.createElement("p");
+								content.innerHTML=data[i]['content'];
+								//var time=document.createElement("p");
+								//time.innerHTML="";
+								div_body.appendChild(content);
+								//div_body.appendChild(time);
+								div_head.appendChild(name_h);
+								div_panel.appendChild(div_head);
+								div_panel.appendChild(div_body);
+								startState.appendChild(div_panel);
+								*/
+								$.each(data,function(idx,obj){
+									var receiver_name=obj.receiver.nickname;
+									var con_tent=obj.content;
+									var send_date=obj.sendDate;
+									var div_panel=document.createElement("div");
+									div_panel.className='panel panel-default';
+									var div_head=document.createElement("div");
+									div_head.className='panel panel-heading';
+									var name_h=document.createElement("h3");
+									name_h.className='panel_title';
+									name_h.innerHTML=receiver_name;
+									var div_body=document.createElement("div");
+									div_body.className='panel panel-body';
+									var content=document.createElement("p");
+									content.innerHTML=con_tent;
+									var senddate=document.createElement("p");
+									senddate.innerHTML=send_date;
+									//var time=document.createElement("p");
+									//time.innerHTML="";
+									div_body.appendChild(content);
+									div_body.appendChild(senddate);
+									//div_body.appendChild(time);
+									div_head.appendChild(name_h);
+									div_panel.appendChild(div_head);
+									div_panel.appendChild(div_body);
+									startState.appendChild(div_panel);
+								});
+								/*如果格式不太对的话试一下下面的方法：
+								JSON.parse(data)
+								或者
+								$.parseJSON(data)
+								*/
+							}
+						
+					});
+				}
+			</script>
+        </div>
+    </div>
+
+</body>
+</html>
