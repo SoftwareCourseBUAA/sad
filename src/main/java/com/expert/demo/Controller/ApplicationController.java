@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.List;
 
@@ -148,8 +149,8 @@ public class ApplicationController {
     }
 
     @PostMapping(value="/admin/apply/matchExpert")
-    public Boolean matchExpert(@RequestParam("expertId") int expertId,@RequestParam("userId") int userId,
-                               MultipartHttpServletRequest request)
+    public String matchExpert(@RequestParam("expertId") int expertId,@RequestParam("userId") int userId,
+                              MultipartHttpServletRequest request)
     {
         List<MultipartFile> files=request.getFiles("file");
         MultipartFile file;
@@ -168,10 +169,8 @@ public class ApplicationController {
                     stream.close();
                     downloadUrl+=saveFile.getAbsolutePath()+";";
                 } catch (Exception e) {
-                    return false;
+                    return "上传失败";
                 }
-            } else {
-                return false;
             }
         }
         User user=userRepository.findByUserId(userId);
@@ -183,10 +182,10 @@ public class ApplicationController {
             matchApplication.setUser(user);
             matchApplication.setDownloadUrl(downloadUrl);
             matchApplicationRepository.save(matchApplication);
-            return true;
+            return "上传成功";
         }
         else
-            return false;
+            return "上传失败，不存在对应的专家或者用户";
 
     }
 

@@ -7,18 +7,20 @@
 
 </head>
 <body>
-<form id="formId" action="/achievement/upload" target="frame1" method="POST" enctype="multipart/form-data">
+<form id="formId" action="/admin/apply/matchExpert?expertId=50&userId=1" target="frame1" method="POST" enctype="multipart/form-data">
     <input type="file" name="file"/>
-    <input type="button" value="提交" onclick="upload()">
+    <input type="file" name="file"/>
+    <input type="file" name="file"/>
+    <button type="submit" name="submit">上传文件</button>
 </form>
 
 <iframe name="frame1" frameborder="0" height="40"></iframe>
 
-<script type="text/javascript">
-    function upload() {
-        $("#formId").submit();
-    }
-</script>
+<!--<script type="text/javascript">-->
+    <!--function upload() {-->
+        <!--$("#formId").submit();-->
+    <!--}-->
+<!--</script>-->
 
 </body>
 </html>
