@@ -34,17 +34,29 @@ public class ApplicationController {
     @Autowired
     private CertifyApplicationRepository certifyApplicationRepository;
 
-    @GetMapping(value="/admin/apply")
-    public List<MatchApplication> getAllApplication()
+    @GetMapping(value="/admin/matchapply")
+    public List<MatchApplication> getAllMatchApplication()
     {
         return matchApplicationRepository.findAll();
     }
 
-    @GetMapping(value="/admin/count")
-    public int getApplicationCount(){return matchApplicationRepository.getAppNumber();}
+    @GetMapping(value="/admin/certifyapply")
+    public List<CertifyApplication> getAllCertifyApplication()
+    {
+        return certifyApplicationRepository.findAll();
+    }
 
-    @GetMapping(value="/admin/apply/add/{userId}/{expertId}")
-    public MatchApplication addApplication(@PathVariable("userId") int userid, @PathVariable("expertId") int expertid)
+    @GetMapping(value="/admin/matchcount")
+    public int getMatchApplicationCount(){return matchApplicationRepository.getAppNumber();}
+
+    @GetMapping(value="/admin/certifycount")
+    public int getCertifyApplicationCount()
+    {
+        return certifyApplicationRepository.getAppNumber();
+    }
+
+    @GetMapping(value="/admin/apply/addmatch/{userId}/{expertId}")
+    public boolean addMatchApplication(@PathVariable("userId") int userid, @PathVariable("expertId") int expertid)
     {
         MatchApplication tobeexpert = new MatchApplication();
         User user = userRepository.findByUserId(userid);
@@ -63,12 +75,13 @@ public class ApplicationController {
             tobeexpert.setUser(user);
             tobeexpert.setExpert(expert);
             matchApplicationRepository.save(tobeexpert);
+            return true;
         }
-        return tobeexpert;
+        return false;
     }
 
-    @DeleteMapping(value="/admin/apply/{applyId}")
-    public boolean rejectApplication(@PathVariable("applyId") int applyid)
+    @GetMapping(value="/admin/matchreject/{applyId}")
+    public boolean rejectMatchApplication(@PathVariable("applyId") int applyid)
     {
         MatchApplication t = matchApplicationRepository.findByApplyId(applyid);
         if(t==null)
@@ -77,8 +90,17 @@ public class ApplicationController {
         return true;
     }
 
-    @GetMapping(value="/admin/apply/accept/{applyId}")
-    public boolean acceptApplication(@PathVariable("applyId") int applyid)
+    @GetMapping(value="/admin/certifyreject/{applyid}")
+    public boolean rejectCertifyApplication(@PathVariable("applyid") int appid)
+    {
+        CertifyApplication c = certifyApplicationRepository.findByApplyId(appid);
+        if(c==null) return false;
+        certifyApplicationRepository.delete(c);
+        return true;
+    }
+
+    @GetMapping(value="/admin/apply/matchaccept/{applyId}")
+    public boolean acceptMatchApplication(@PathVariable("applyId") int applyid)
     {
         MatchApplication t = matchApplicationRepository.findByApplyId(applyid);
         if(t==null)
@@ -90,6 +112,26 @@ public class ApplicationController {
             return false;
         expertRepository.save(expert);
         matchApplicationRepository.delete(t);
+        return true;
+    }
+
+    @GetMapping(value="/admin/apply/certifyaccept/{applyid}")
+    public boolean acceptCertifyApplication(@PathVariable("applyid") int applyid)
+    {
+        CertifyApplication c = certifyApplicationRepository.findByApplyId(applyid);
+        if(c==null) return false;
+        Expert newe = new Expert();
+        if(c.getName()==null) return false;
+        newe.setName(c.getName());
+        if(c.getField()!=null) newe.setField(c.getField());
+        if(c.getinstitution()!=null) newe.setInstitution(c.getinstitution());
+        if(c.getOtherAchievement()!=null) newe.setOtherAchievement(c.getOtherAchievement());
+        if(c.getPatent()!=null) newe.setPatent(c.getPatent());
+        if(c.getProject()!=null) newe.setProject(c.getProject());
+        User u = c.getUser();
+        newe.setUser(u);
+        expertRepository.save(newe);
+        certifyApplicationRepository.delete(c);
         return true;
     }
 
