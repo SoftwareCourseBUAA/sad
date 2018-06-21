@@ -427,7 +427,7 @@ $(document).ready(function() {
 					//data = JSON.stringify(data);
 					//alert(data);
 				c=data['identity'];
-				alert(c);
+				//alert(c);
 			    });
 				if(c=="1")
 				{
@@ -438,7 +438,7 @@ $(document).ready(function() {
 					var d="";
 					$.get(url+"/expert/id/"+id,function(data1,status){
 					d=data1[0].expertId;
-					alert(d);
+					//alert(d);
 			    	});
 					window.location.href="expert_info.html?expertId="+d;
 				}

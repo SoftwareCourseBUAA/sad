@@ -176,9 +176,9 @@
             <li><a href="main.html">主页</a></li>
             <li class="active"><a href="expert_search.html">成果搜索</a></li>
             <li><a href="register.html">加入我们</a></li>
-            <li><a href="charge/charge.html" onclick="charge()">充值</a></li>
-            <li><a href="charge/exchange.html" onclick="exchange()">物品换取</a></li>
-	    <li><a href="mail_sender.html" onclick="mmail()">站内信</a></li>	
+            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="#" onclick="exchange()">物品换取</a></li>
+	    <li><a href="#" onclick="mmail()">站内信</a></li>	
         </ul>
         <ul class="nav navbar-nav navbar-right">
         <li class="dropdown navbar-right">
@@ -621,7 +621,7 @@
                     //data = JSON.stringify(data);
                     //alert(data);
                 c=data['identity'];
-                alert(c);
+                //alert(c);
                 });
                 if(c=="1")
                 {
@@ -632,7 +632,7 @@
                     var d="";
                     $.get(url+"/expert/id/"+id,function(data1,status){
                     d=data1[0].expertId;
-                    alert(d);
+                    //alert(d);
                     });
                     window.location.href="expert_info.html?expertId="+d;
                 }
