@@ -315,17 +315,21 @@
 
 	<script>
 	var urlhead='http://39.107.106.211:8081';
-    var urltail='&page=0&size=500';
+    var urltail='&page=0&size=100';
     $(document).ready(function() {
         var table1=$('#dataTables-example').DataTable({
             searching: false,
             dom: 'Bfrtip',
             select: true,
+            pagingType: 'simple',
+            info:false
         });
         var table2=$('#dataTables-search').DataTable({
             searching: false,
             dom: 'Bfrtip',
-            select: true
+            select: true,
+            pagingType: 'simple',
+            info:false
         });
 
         $("#dataTables-example").DataTable().on("select", function () {
@@ -599,7 +603,7 @@
 			}
 			else
 			{
-				window.location.href="alter/Mail.html";
+				window.location.href="mailbox.html?userId="+id;
 			}
 		}	
         function uinfo(){

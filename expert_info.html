@@ -51,7 +51,7 @@
                                         <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
                                 </div>
                                 <div class="form-group" >
-                                    <font color="#999999">还没有账号？</font><a href="../../Documents/Tencent Files/326103703/FileRecv/register.html" color="#CCCC00">前往注册</a>
+                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
                                 </div>
                                 <div class="form-group col-md-offset-9">
                                     <button id='btn123' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
@@ -409,7 +409,7 @@ $(document).ready(function() {
 			}
 			else
 			{
-				window.location.href="alter/Mail.html";
+				window.location.href="mailbox.html?userId="+id;
 			}
 		}	
 		function uinfo(){
