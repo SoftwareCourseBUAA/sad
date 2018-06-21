@@ -138,7 +138,7 @@ function loginShow()
 			}
 		}	
 		
-	function uinfo(){
+function uinfo(){
 			var id="";
 			var id=getCookie("userId");
 			if(id=="")
@@ -147,9 +147,33 @@ function loginShow()
 			}
 			else
 			{
-				window.location.href="../user_info.html";
+				var c="";
+				$.ajaxSettings.async=false;
+				$.get(url+"/userInformation?userId="+id,function(data,status){
+					//data = JSON.stringify(data);
+					//alert(data);
+				c=data['identity'];
+				//alert(c);
+			    });
+				if(c=="1")
+				{
+				window.location.href="user_info.html";
+				}
+				else if(c=="2")
+				{
+					var d="";
+					$.get(url+"/expert/id/"+id,function(data1,status){
+					d=data1[0].expertId;
+					//alert(d);
+			    	});
+					window.location.href="expert_info.html?expertId="+d;
+				}
+				else
+				{
+					alert("error");
+				}
 			}
-		}
+		}	
 function showPoint()
 		{
 			var val1 =getCookie("userId");
@@ -183,6 +207,7 @@ function chongzhi()
 					async:false,
 					success : function(data) {
                alert("充值成功");
+			   window.location.href='charge.html';
             } ,
             error : function(data) {
                alert("error");
@@ -259,33 +284,9 @@ function uinfo(){
 			}
 			else
 			{
-				var c="";
-				$.ajaxSettings.async=false;
-				$.get(url+"/userInformation?userId="+id,function(data,status){
-					//data = JSON.stringify(data);
-					//alert(data);
-				c=data['identity'];
-				//alert(c);
-			    });
-				if(c=="1")
-				{
-				window.location.href="user_info.html";
-				}
-				else if(c=="2")
-				{
-					var d="";
-					$.get(url+"/expert/id/"+id,function(data1,status){
-					d=data1[0].expertId;
-					//alert(d);
-			    	});
-					window.location.href="expert_info.html?expertId="+d;
-				}
-				else
-				{
-					alert("error");
-				}
+				window.location.href="../user_info.html";
 			}
-		}	
+		}
 
 function recharge()
 {
@@ -522,7 +523,7 @@ function show()
       	
         <li class="layui-nav-item"><a class="layui-this" href="charge.html">充值</a></li>
         
-        <li class="layui-nav-item"><a class="layui-this" href="user_exchange_record.html">个人交易记录</a></li>
+        
         
         
       </ul>
@@ -537,7 +538,7 @@ function show()
   
   <div  class="fw_conent"> 
     <!--内容开始------------------------------>
-    <div class="bzzx_bt"> <strong>科技网充值中心</strong></div>
+    <div class="bzzx_bt"> <strong>共享平台充值中心</strong></div>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="zwfb_shop_table">
       <tr valign="top">
         <td align="right" width="70">充值积分数量：</td>
@@ -572,7 +573,7 @@ function show()
 			showPoint();
 			</script>
         <td><div class=" zwsl_num" >
-        <dd id="showPoint" style="text-align: middle"></dd>
+        <dd id="showPoint"></dd>
         </div> </td>
         
       </tr>

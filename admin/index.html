@@ -472,6 +472,7 @@
         function matchApplyShow(index)
         {
             //alert(applyId);
+            document.getElementById("evidence").innerHTML="";
             document.getElementById("apply_user_id").innerHTML=matchdata[index].user.userId;
             document.getElementById("apply_user_nickname").innerHTML=matchdata[index].user.nickname;
             document.getElementById("apply_expert_id").innerHTML=matchdata[index].expert.expertId;
@@ -495,6 +496,8 @@
         function certifyApplyShow(index)
         {
             //alert(applyId);
+            document.getElementById("evidence").innerHTML="";
+
             document.getElementById("apply_user_id").innerHTML="认证专家";
             document.getElementById("apply_user_nickname").innerHTML="认证专家";
             document.getElementById("apply_expert_id").innerHTML="认证专家";

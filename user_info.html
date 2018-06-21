@@ -97,10 +97,11 @@
                                     <input type="file" name="file" id="infile2">
                                 	<br>
                                     <i class="fa fa-lock fa-lg"></i>
-                                </form>
+                                
                                 <div class="form-group col-md-offset-9" style="margin-left:7px">
                                     <button type="submit" class="btn btn-success" onclick="proPost()">确认认证</button>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -330,7 +331,9 @@
 		function proPost()
 		{
 			var uid=getCookie("userId");
-			document.getElementById('infile').action=url+"/admin/apply/certifiedExpert/upload/"+uid;
+			document.getElementById('infile').setAttribute("action",url+"/admin/apply/certifiedExpert/upload/"+uid);
+			
+			
 			$("#infile").submit();
 			var v1 = document.getElementById("proname").value;
             var v2 = document.getElementById("field").value;
