@@ -26,8 +26,8 @@
                        <label for="inputfile">认证文件3</label>
                                     <input type="file" name="file" id="upfile3">
                                 	<br>
-                       <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="upevi()">上传文件</button>							               			</form>
-                       <iframe style="display:none" name="frame1" frameborder="0" height="0"></iframe>
+                       <button id='btn' type="submit" target='_blank' class="btn btn-success" name="submit" onclick="upevi()">上传文件</button>							               			</form>
+                       <!--iframe style="display:none" name="frame1" frameborder="0" height="0"></iframe-->
                     </div>
                 </div>
             </div>
@@ -110,8 +110,8 @@
             <p>工作单位：<span id='institution'></span></p> 
             <p>简介：<span id='introducation'></span></p>
             <p>其他成就：<span id='otherAchievement'></span></p>   
-            <p><button class="btn btn-success" onClick="to_modify()">修改信息</button></p>
-            <p><a href="#" class="btn btn-success" role="button" id="claim">认领专家</a></p>  
+            <p><button class="btn btn-success" name="dis"  onClick="to_modify()">修改信息</button></p>
+            <p><a class="btn btn-success" role="button" id="claim">认领专家</a></p>  
         </div>
         </div> 
         <div class="col-sm-6"> 
@@ -137,7 +137,7 @@
                               <h3>科研项目</h3>
                               <div id='project'></div>
                               <p style="font-size:14px"></p> 
-                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                              <p><button class="btn btn-success" name="dis" onClick="to_search_achievement()">管理成果</button></p>
                           </div>
                       </div>
                   </div>
@@ -148,7 +148,7 @@
                               <div id='title'></div>
                               <a id='url' href= "#" onClick="url_transition()"></a>
                               <p style="font-size:14px"></p>
-                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                              <p><button class="btn btn-success" name="dis" onClick="to_search_achievement()">管理成果</button></p>
                           </div>
                       </div>
                   </div>
@@ -158,7 +158,7 @@
                               <h3>科技专利</h3>
                               <div id='patent'></div>
                               <p style="font-size:14px"></p>
-                              <p><button class="btn btn-success" onClick="to_search_achievement()">管理成果</button></p>
+                              <p><button class="btn btn-success" name="dis" onClick="to_search_achievement()">管理成果</button></p>
                           </div>
                       </div>
                   </div>
@@ -166,7 +166,7 @@
               </div>
 
           </div>
-          <!-------------------------标签页结束----------------------------->
+         
         </div> 
 </div>
 <script type="text/javascript">
@@ -201,9 +201,11 @@ var EId = v['expertId'];
 			return "";
 		}
 var url="http://39.107.106.211:8081";
+var userid_now = getCookie('userId');
+var userid_expert=null;
 function upevi()
 {
-document.getElementById('infile').setAttribute('action','http://39.107.106.211:8081/admin/apply/matchExpert?expertId='+EId+'&userId='+getCookie('userId'));
+document.getElementById('infile').setAttribute('action','http://39.107.106.211:8081/admin/apply/matchExpert?expertId='+EId+'&userId='+userid_now);
 	$("#infile").submit();
 	window.location="expert_info.html?expertId="+EId;
 	alert("上传成功！");
@@ -213,27 +215,50 @@ document.getElementById('infile').setAttribute('action','http://39.107.106.211:8
 //var val=getCookie(expertId);
 //document.getElementById('infile').action=url+"/expert/e_id/"+val;
 //$("#infile").submit();
-$.get(url+"/expert/e_id/"+EId,function(data){
-document.getElementById("name").innerHTML=data.name
-document.getElementById("field").innerHTML=data.field
-document.getElementById("institution").innerHTML=data.institution
-document.getElementById("introducation").innerHTML=data.introducation
-document.getElementById("otherAchievement").innerHTML=data.otherAchievement
-document.getElementById("project").innerHTML=data.project
-document.getElementById("patent").innerHTML=data.patent
-	});
-	$.get(url+"/expert-paper/"+EId,function(data){
+$.ajax({
+	type :'GET',
+	url:url+"/expert/e_id/"+EId,
+	async:false,
+	success:function(data){
+		document.getElementById("name").innerHTML=data.name
+		document.getElementById("field").innerHTML=data.field
+		document.getElementById("institution").innerHTML=data.institution
+		document.getElementById("introducation").innerHTML=data.introducation
+		document.getElementById("otherAchievement").innerHTML=data.otherAchievement
+		document.getElementById("project").innerHTML=data.project
+		document.getElementById("patent").innerHTML=data.patent
+		if(data.user!=null)
+		{
+			userid_expert=data.user.userId;
+		}
+	}
+});
+
+$.get(url+"/expert-paper/"+EId,function(data){
 document.getElementById("title").innerHTML=data[0].paper.title
 var theurl=document.getElementById("url").innerHTML=data[0].paper.url
+});
 
-	});
+if(userid_expert==null || userid_expert!=userid_now)
+{
+	var btns = document.getElementsByName('dis');
+	for(let x =0;x<btns.length;x++)
+	{
+		btns[x].setAttribute('style','display:none');
+	}
+}
 
+if(userid_now=="")
+{
+	document.getElementById('claim').setAttribute('style','display:none');
+}
 	
 	//theurl = JSON.stringify(theurl);
 //	function url_transition(){
 	//	window.open="theurl"
 		//}
 		function to_search_achievement(){
+
 			window.location="search_achievement.html?expertId="+EId
 			}
 			function to_modify(){
@@ -334,7 +359,7 @@ $(document).ready(function() {
 					var cookie="userId="+data;
 					//alert("sss");
 					document.cookie = cookie;
-					window.location.href="register.html";
+					window.location.href="expert_info.html";
 				}
 			});	
 		}
