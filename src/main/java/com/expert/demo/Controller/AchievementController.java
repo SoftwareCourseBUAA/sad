@@ -30,7 +30,8 @@ public class AchievementController
     @Autowired
     ExpertRepository expertRepository;
 
-
+    @Autowired
+    ApplicationController applicationController;
 
     @PostMapping(value = "/achievement")
     public int addAchievement(@RequestBody ExAchievement exAchievement)
@@ -110,28 +111,20 @@ public class AchievementController
             return false;
         if (!file.isEmpty()) {
             String saveFileName = file.getOriginalFilename();
-            String pathName = "upload/achievement" + saveFileName;
-            File saveFile = new File(pathName);
-            if (!saveFile.getParentFile().exists()) {
-                saveFile.getParentFile().mkdirs();
+            ApplicationController applicationController=new ApplicationController();
+            String url=applicationController.upload(file,"/upload/achievement");
+            if(url==null){
+                return false;
             }
-            try {
-                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(saveFile));
-                out.write(file.getBytes());
-                out.flush();
-                out.close();
-                String savePath=saveFile.getAbsolutePath();
-                String downloadUrl="http://39.107.106.211:8081/"+"achievement/"+saveFileName;
+            else
+            {
+                String downloadUrl="http://39.107.106.211:8081"+"/achievement"+url;
                 Achievement achievement=achievementRepository.findAchievementByAchievementId(achievementId);
-                achievement.setDownloadUrl(savePath);
+                achievement.setDownloadUrl(downloadUrl);
                 achievementRepository.save(achievement);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
             }
+
+
         }
         return true;
     }

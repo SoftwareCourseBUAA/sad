@@ -173,7 +173,7 @@ public class ApplicationController {
             ,@PathVariable("userId") int userId)
     {
 
-        String url=upload(multipartFile,"upload/evidence/"+"certifiy"+userId);
+        String url=upload(multipartFile,"upload/evidence/"+"certify"+userId);
         String downloadUrl="evidence/"+"certify"+userId+url;
         if(url==null)
             return false;
@@ -216,6 +216,7 @@ public class ApplicationController {
                     downloadUrl+="http://39.107.106.211:8081/"+"evidence/"+"match"+userId
                             +file.getOriginalFilename()+";";
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return "上传失败";
                 }
             }
@@ -236,7 +237,7 @@ public class ApplicationController {
 
     }
 
-    private String upload(MultipartFile file,String path)
+    public String upload(MultipartFile file,String path)
     {
         String downloadUrl="";
         if (!file.isEmpty()) {
