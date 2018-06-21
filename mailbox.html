@@ -237,9 +237,33 @@
 					}
 					else
 					{
+						var c="";
+						$.ajaxSettings.async=false;
+						$.get(url+"/userInformation?userId="+id,function(data,status){
+							//data = JSON.stringify(data);
+							//alert(data);
+						c=data['identity'];
+						alert(c);
+					    });
+						if(c=="1")
+						{
 						window.location.href="user_info.html";
+						}
+						else if(c=="2")
+						{
+							var d="";
+							$.get(url+"/expert/id/"+id,function(data1,status){
+							d=data1[0].expertId;
+							alert(d);
+					    	});
+							window.location.href="expert_info.html?expertId="+d;
+						}
+						else
+						{
+							alert("error");
+						}
 					}
-				}
+				}	
 				function uname1()
        			{
            	 		var a=checkName();

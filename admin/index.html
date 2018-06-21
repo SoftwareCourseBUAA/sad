@@ -396,13 +396,22 @@
                     count=count+data;
                 
             }); 
-            $.get(url+"admin/certifycount",function(data)
-            {
-                count=count+data;
-                alert(data+"条未处理请求！");
-                document.getElementById("apply_count").innerHTML=count;
-                
-            }); 
+
+            setTimeout( function(){
+                $.get(url+"admin/certifycount",function(data)
+                {
+                    count=count+data;
+                    alert(count+"条未处理请求！");
+                    document.getElementById("apply_count").innerHTML=count;
+                }); 
+            
+            }, 1000 );
+
+           
+        }
+
+        function fun(){
+
         }
 
         function getPaperCount()
@@ -434,7 +443,7 @@
                     newbar.setAttribute("class","list-group-item");
                     newbar.setAttribute("onClick","matchApplyShow("+i+")");
 
-                    var s="认领请求，来自"+data[i].user.nickname;
+                    var s="认领请求，来自"+data[i].user.nickname+",认证成为"+data[i].expert.name;
                     newbar.append(s);
                     parent.appendChild(newbar);
                 }
@@ -455,7 +464,7 @@
                     newbar.setAttribute("class","list-group-item");
                     newbar.setAttribute("onClick","certifyApplyShow("+i+")");
 
-                    var s="认证请求，来自"+data[i].user.nickname;
+                    var s="认领请求，来自"+data[i].user.nickname+",认证成为"+data[i].expert.name;
                     newbar.append(s);
                     parent.appendChild(newbar);
                 }
