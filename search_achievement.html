@@ -335,7 +335,7 @@ var EId = v['expertId'];
 			$.get(url+"/achievement/expert/"+EId,function(data){
 			$("#table").html("<tr style='height:50px'><td style='width:50px'>序号</td><td style='width:200px'>成果名称</td><td style='width:400px'>成果简介</td><td style='width:100px'>交易方式</td><td style='width:100px'>价格</td><td style='width:100px'>下载量</td><td style='width:70px'>操作1</td><td style='width:70px'>操作2</td></tr>");
 			//var list = eval("("+data+")");
-            	for(var i=0;;i++){
+            	for(var i=0;i<data.length;i++){
 					if(data[i].type==1)
 					{
 						var t="积分交易";

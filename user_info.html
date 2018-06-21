@@ -328,13 +328,21 @@
 				//alert(data);
 			});
 		}
-		function proPost()
+		function upevi()
 		{
 			var uid=getCookie("userId");
 			document.getElementById('infile').setAttribute("action",url+"/admin/apply/certifiedExpert/upload/"+uid);
 			
 			
 			$("#infile").submit();
+			window.location="user_info.html?userId="+uid;
+			//alert("上传成功！");
+		}
+
+		function proPost()
+		{
+			var uid=getCookie("userId");
+			
 			var v1 = document.getElementById("proname").value;
             var v2 = document.getElementById("field").value;
 			var v3 = document.getElementById("institution").value;
@@ -381,6 +389,8 @@
 			        }
 			        
 			};
+
+			//upevi();
 			if(v1=="")
 			{
 				alert("请填写专家姓名！");
@@ -396,6 +406,7 @@
 			else
 			{	
 			$.ajax(settings);
+			upevi();
 			}
 		}
 				function charge(){
