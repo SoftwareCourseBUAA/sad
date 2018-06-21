@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>论文网</title>
+<title>充值中心</title>
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
@@ -21,6 +21,135 @@
 
 <script type="text/javascript">
 var url="http://39.107.106.211:8081";
+function loginShow()
+        {
+           // $('#llogin').modal();
+		   //$('#llogin').modal();
+		   window.location.href="../register.html";
+        }
+		function doPostt()
+		{
+			//alert("qqq");
+			var val1 = document.getElementById("username").value;
+            var val2 = document.getElementById("password").value;
+            var btn = document.getElementById('btn');
+            //btn.addEventListener('mouseclick')
+            //http://localhost:8080/login.html
+			$.get(url+"/users?nickname="+val1+"&password="+val2,function(data)
+			{
+      			if(data==0)
+				{
+					alert("用户名或密码不正确！");
+				}
+				else
+				{
+					var cookie="userId="+data;
+					//alert("sss");
+					document.cookie = cookie;
+					window.location.href="../register.html";
+				}
+			});	
+		}
+		function uname1()
+		{
+			var a=checkName();
+			$("#uname").append(a);
+		}
+		function getCookie(c_name){
+			if(document.cookie.length>0){
+				c_start=document.cookie.indexOf(c_name+"=")
+				if(c_start!=-1){
+					c_start=c_start+c_name.length+1
+					c_end=document.cookie.indexOf(";",c_start)
+					if(c_end==-1){
+						c_end=document.cookie.length
+					}
+					return unescape(document.cookie.substring(c_start,c_end))
+				}
+			}
+			return "";
+		}
+		function checkName(){
+			var username=getCookie("userId");
+			if(username=="")
+			{
+				document.getElementById("lin").href="#";
+				document.getElementById("lout").href="";
+				var b="游客";
+				return b;
+			}
+			else
+			{
+				document.getElementById("lin").href="";
+				document.getElementById("lout").href="#";
+				var c="";
+				$.ajaxSettings.async=false;
+			$.get(url+"/nickname?userId="+username,function(data,status){
+				c=data;
+				//alert(c);
+			});
+			return c;
+			}
+		}
+		function clearall() {  
+   		 setCookie("userId", "", -1);
+		 location.reload();
+		}  
+		function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = cname + "=" + cvalue + "; " + expires;
+	    }
+		function charge(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="charge.html";
+			}
+		}
+		function exchange(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="exchange.html";
+			}
+		}	
+		function mmail(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="../mailbox.html";
+			}
+		}	
+		
+	function uinfo(){
+			var id="";
+			var id=getCookie("userId");
+			if(id=="")
+			{
+				alert("请先登录");
+			}
+			else
+			{
+				window.location.href="../user_info.html";
+			}
+		}
 function showPoint()
 		{
 			var val1 =getCookie("userId");
@@ -130,7 +259,7 @@ function uinfo(){
 			}
 			else
 			{
-				window.location.href="user_info.html";
+				window.location.href="../user_info.html";
 			}
 		}
 
@@ -191,7 +320,7 @@ function show()
 					var cookie="userId="+data;
 					//alert("sss");
 					document.cookie = cookie;
-					window.location.href="register.html";
+					window.location.href="../register.html";
 				}
 			});	
 		}
@@ -255,7 +384,7 @@ function show()
 			}
 			else
 			{
-				window.location.href="charge/charge.html";
+				window.location.href="charge.html";
 			}
 		}
 		function exchange(){
@@ -267,7 +396,7 @@ function show()
 			}
 			else
 			{
-				window.location.href="charge/exchange.html";
+				window.location.href="exchange.html";
 			}
 		}	
 		function mmail(){
@@ -279,7 +408,7 @@ function show()
 			}
 			else
 			{
-				window.location.href="alter/Mail.html";
+				window.location.href="../mailbox.html";
 			}
 		}	
 </script>
@@ -294,37 +423,38 @@ function show()
 
 <body onLoad="uname1()">
         <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-            	<div class="modal-content" style="margin-top:40%">
-                	<div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
-                    </div>
-        			<div class="modal-body">
-           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
-                			<div class="col-md-12">
-                    			<div class="form-group">
-                        			<i class="fa fa-user fa-lg"></i>
-                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
-                                </div>
-                                <div class="form-group">
-                                        <i class="fa fa-lock fa-lg"></i>
-                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
-                                </div>
-                                <div class="form-group" >
-                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
-                                </div>
-                                <div class="form-group col-md-offset-9">
-                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
-                                </div>
-                            </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="margin-top:40%">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal col-md-offset-0" id="login_form">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <i class="fa fa-user fa-lg"></i>
+                            <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                        </div>
+                        <div class="form-group">
+                                <i class="fa fa-lock fa-lg"></i>
+                                <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                        </div>
+                        <div class="form-group" >
+                            <font color="#999999">还没有账号？</font><a href="../register.html" color="#CCCC00">前往注册</a>
+                        </div>
+                        <div class="form-group col-md-offset-9">
+                            <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                    </div>
-    			</div>
+                </div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
+
 <div>
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="container-fluid">
@@ -333,10 +463,10 @@ function show()
     </div>
     <div style="margin-right:10%">
         <ul class="nav navbar-nav navbar-left">  
-            <li><a href="admin/pages/main.html">主页</a></li>
-            <li><a href="pages/expertSearch.html">成果搜索</a></li>
-            <li class="active"><a href="#">加入我们</a></li>
-            <li><a href="#" onclick="charge()">充值</a></li>
+            <li><a href="../main.html">主页</a></li>
+            <li><a href="../expert_search.html">成果搜索</a></li>
+            <li><a href="../register.html">加入我们</a></li>
+            <li class="active"><a href="#" onclick="charge()">充值</a></li>
             <li><a href="#" onclick="exchange()">物品换取</a></li>
 	    <li><a href="#" onclick="mmail()">站内信</a></li>	
         </ul>
@@ -349,10 +479,8 @@ function show()
             <li>
                 <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
                 <li class="divider"></li>
-            <li>
-                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
-                <li>
-                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+            <li><a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+            <li><a href="#" id="useriii" onClick="uinfo()">个人信息</a></li>
         </ul>
         </li>
         </ul>
@@ -367,10 +495,10 @@ function show()
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-      	<li class="layui-nav-item"><a class="layui-this" href="exchange.html">交易</a></li>
+      	
         <li class="layui-nav-item"><a class="layui-this" href="charge.html">充值</a></li>
         
-        <li class="layui-nav-item"><a class="layui-this" href="exchange_record.html">交易记录</a></li>
+        <li class="layui-nav-item"><a class="layui-this" href="user_exchange_record.html">个人交易记录</a></li>
         
         
       </ul>

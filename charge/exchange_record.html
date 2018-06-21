@@ -83,7 +83,8 @@ function showTradeachievement()
 }
 		function loginShow()
         {
-            $('#llogin').modal();
+            //$('#llogin').modal();
+			window.location.href="../register.html";
         }
 		function doPostt()
 		{
@@ -104,7 +105,7 @@ function showTradeachievement()
 					var cookie="userId="+data;
 					//alert("sss");
 					document.cookie = cookie;
-					window.location.href="register.html";
+					window.location.href="../register.html";
 				}
 			});	
 		}
@@ -168,7 +169,7 @@ function showTradeachievement()
 			}
 			else
 			{
-				window.location.href="charge/charge.html";
+				window.location.href="charge.html";
 			}
 		}
 		function exchange(){
@@ -180,7 +181,7 @@ function showTradeachievement()
 			}
 			else
 			{
-				window.location.href="charge/exchange.html";
+				window.location.href="exchange.html";
 			}
 		}	
 		function mmail(){
@@ -192,7 +193,7 @@ function showTradeachievement()
 			}
 			else
 			{
-				window.location.href="alter/Mail.html";
+				window.location.href="../mailbox.html";
 			}
 		}	
 		
@@ -205,8 +206,11 @@ function showTradeachievement()
 			}
 			else
 			{
-				window.location.href="user_info.html";
+				window.location.href="../user_info.html";
 			}
+		}
+		function tiao2(){
+			window.location.href="exchange.html?achievementId="+AcId;
 		}
 </script>
 
@@ -217,38 +221,39 @@ function showTradeachievement()
 <div class="layui-layout layui-layout-admin">
   
   <body>
-        <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-            	<div class="modal-content" style="margin-top:40%">
-                	<div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                       <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
-                    </div>
-        			<div class="modal-body">
-           			 	<div class="form-horizontal col-md-offset-0" id="login_form">
-                			<div class="col-md-12">
-                    			<div class="form-group">
-                        			<i class="fa fa-user fa-lg"></i>
-                                    <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
-                                </div>
-                                <div class="form-group">
-                                        <i class="fa fa-lock fa-lg"></i>
-                                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
-                                </div>
-                                <div class="form-group" >
-                                    <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
-                                </div>
-                                <div class="form-group col-md-offset-9">
-                                    <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
-                                </div>
-                            </div>
+       <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="margin-top:40%">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal col-md-offset-0" id="login_form">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <i class="fa fa-user fa-lg"></i>
+                            <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                        </div>
+                        <div class="form-group">
+                                <i class="fa fa-lock fa-lg"></i>
+                                <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                        </div>
+                        <div class="form-group" >
+                            <font color="#999999">还没有账号？</font><a href="../register.html" color="#CCCC00">前往注册</a>
+                        </div>
+                        <div class="form-group col-md-offset-9">
+                            <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                    </div>
-    			</div>
+                </div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
+    </div>
+</div>
+
 <div>
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="container-fluid">
@@ -257,11 +262,11 @@ function showTradeachievement()
     </div>
     <div style="margin-right:10%">
         <ul class="nav navbar-nav navbar-left">  
-            <li><a href="admin/pages/main.html">主页</a></li>s
-            <li><a href="pages/expertSearch.html">成果搜索</a></li>
-            <li class="active"><a href="#">加入我们</a></li>
+            <li><a href="../main.html">主页</a></li>
+            <li><a href="../expert_search.html">成果搜索</a></li>
+            <li><a href="../register.html">加入我们</a></li>
             <li><a href="#" onclick="charge()">充值</a></li>
-            <li><a href="#" onclick="exchange()">物品换取</a></li>
+            <li class="active"><a href="#" onclick="exchange()">物品换取</a></li>
 	    <li><a href="#" onclick="mmail()">站内信</a></li>	
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -273,10 +278,8 @@ function showTradeachievement()
             <li>
                 <a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
                 <li class="divider"></li>
-            <li>
-                <a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
-                 <li>
-                <a href="#" id="iii" onClick="uinfo()">个人信息</a></li>
+            <li><a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+            <li><a href="#" id="useriii" onClick="uinfo()">个人信息</a></li>
         </ul>
         </li>
         </ul>
@@ -293,7 +296,7 @@ function showTradeachievement()
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-      	<li class="layui-nav-item"><a class="layui-this" href="exchange.html">交易</a></li>
+      	<li class="layui-nav-item"><a class="layui-this" onClick="tiao2()">交易</a></li>
         <li class="layui-nav-item"><a class="layui-this" href="charge.html">充值</a></li>
         <li class="layui-nav-item"><a class="layui-this" >查询积分</a>
         <dl class="layui-nav-child">
@@ -304,7 +307,7 @@ function showTradeachievement()
             <dd id="showPoint"></a></dd>
           </dl>
         </li>
-        <li class="layui-nav-item"><a class="layui-this" href="exchange_record.html">交易记录</a></li>
+        <li class="layui-nav-item"><a class="layui-this" herf="change_record.html">交易记录</a></li>
         
         
       </ul>

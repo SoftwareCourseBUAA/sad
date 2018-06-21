@@ -6,30 +6,89 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-    <script>
-			function checkName(){
-				var url=location.search;
-				var theRequest=new Object();
-				if(url.indexOf('?')!=-1){
-					var str=url.substr(1);
-					var strs=str.split("&");
-					for ( var i = 0; i < strs.length; i++ ) {
-    					theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
- 					}
-					var id=theRequest['userId'];
-					$.get("http://f09e0926.ngrok.io/nickname?userId="+id,function(data,status){
-						document.getElementById("nameTag").innerHTML=data;
-						sender=data;
-					});
-  					return theRequest['userId'];
-				}
-			}
-			function Write(){
-				var name=checkName();
-			}
-	</script>
 </head>
 <body onLoad="Write()">
+
+
+    <!--
+    NaiveBar Is Here:
+    Which is modified in 2017/6/21
+    -->
+    <div>
+		<nav class="navbar navbar-inverse" role="navigation">
+    		<div class="container-fluid">
+    			<div class="navbar-header" style="margin-left:20%">
+        			<a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    			</div>
+    			<div style="margin-right:10%">
+       				 <ul class="nav navbar-nav navbar-left">  
+            			<li><a href="main.html">主页</a></li>
+           				<li><a href="expert_search.html">成果搜索</a></li>
+            			<li><a href="register.html">加入我们</a></li>
+            			<li><a href="#" onclick="charge()">充值</a></li>
+            			<li><a href="#" onclick="exchange()">物品换取</a></li>
+	   					<li class="active"><a href="#" onclick="mmail()">站内信</a></li>	
+        			</ul>
+        			<ul class="nav navbar-nav navbar-right">
+       					<li class="dropdown navbar-right">
+            				<a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span></a>
+       		 				<ul class="dropdown-menu">
+            					<li><a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                				<li class="divider"></li>
+            					<li><a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+            					<li><a href="#" id="useriii" onClick="uinfo()">个人信息</a></li>
+        					</ul>
+        				</li>
+        			</ul>
+    			</div>
+    		</div>
+		</nav>
+	</div>
+    
+    
+    
+    
+    <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="margin-top:40%">
+                <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal col-md-offset-0" id="login_form">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <i class="fa fa-user fa-lg"></i>
+                                <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                            </div>
+                            <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                            </div>
+                            <div class="form-group" >
+                                <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                            </div>
+                            <div class="form-group col-md-offset-9">
+                                <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    
+    
+    
+    <!--
+    	Here is mine own
+    -->
+
+
 	<p class="label label-info" id="nameTag"></p>
     <form role="form">
     	<h2><span class="label label-default"> Writing Your Letter  Now</span></h2>
@@ -74,61 +133,170 @@
 		</script>
 		<label for="Time">Present Time：</label>
 		<div id="divT"></div>
-       
     </form>
     <button class="btn btn-default btn-danger" onClick="sendPost()">Send</button> 
      <script type="text/javascript">
-	function sendPost()
-	{
-		var id=checkName();
-		var receiver_name=document.getElementById("receiver_name").value;
-        var con_tent=document.getElementById("content").value;
-        var th_eme=document.getElementById("theme").value;
-		var user={
-			"sender":sender,
-			"receiver":receiver_name,
-			"content":con_tent,
-			"theme":th_eme
+	 	var url_="http://39.107.106.211:8081";
+	 	function check_Name(){
+			var url=location.search;
+			var theRequest=new Object();
+			if(url.indexOf('?')!=-1){
+				var str=url.substr(1);
+				var strs=str.split("&");
+				for ( var i = 0; i < strs.length; i++ ) {
+    				theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
+ 				}
+				var id=theRequest['userId'];
+				$.get(url_+"/nickname?userId="+id,function(data,status){
+					document.getElementById("nameTag").innerHTML=data;
+					sender=data;
+					$("#uname").append(data);
+				});
+  				return theRequest['userId'];
+			}
 		}
-		user = JSON.stringify(user);
-        $.ajax({
-			    type:'POST',
-			    url:'http://f09e0926.ngrok.io/communicationMessage',
-			    data:user,
-				async:false,
-				dataType:"json",
-				contentType:"application/json",
-				/*headers:{
-					contentType:"application/json"
-				},*/
-				error: function(data){
-					alert("fail");
-				},
-				success: function(data){
-					alert("succeed");
+		function Write(){
+			var name=check_Name();
+			uname1();
+		}
+		function sendPost()
+		{
+			var id=check_Name();
+			var receiver_name=document.getElementById("receiver_name").value;
+       	 	var con_tent=document.getElementById("content").value;
+        	var th_eme=document.getElementById("theme").value;
+			var user={
+				"sender":sender,
+				"receiver":receiver_name,
+				"content":con_tent,
+				"theme":th_eme
+			}
+			user = JSON.stringify(user);
+        	$.ajax({
+			   	 	type:'POST',
+			    	url:url_+'/communicationMessage',
+			    	data:user,
+					async:false,
+					dataType:"json",
+					contentType:"application/json",
+					error: function(data){
+						alert("fail");
+					},
+					success: function(data){
+						alert("succeed");
+					}
+			});
+			window.location.reload();
+		}
+
+
+//the others:
+
+				function getCookie(c_name){
+					if(document.cookie.length>0){
+						c_start=document.cookie.indexOf(c_name+"=")
+						if(c_start!=-1){
+							c_start=c_start+c_name.length+1
+							c_end=document.cookie.indexOf(";",c_start)
+							if(c_end==-1){
+								c_end=document.cookie.length
+							}	
+							return unescape(document.cookie.substring(c_start,c_end))
+						}
+					}
+					return "";
 				}
-		});
-		window.location.reload();
-	}
-	</script>
+				function charge(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="charge/charge.html";
+					}
+				}
+				function exchange(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="charge/exchange.html";
+					}
+				}	
+				function mmail(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="mailbox.html?userId="+id;
+					}
+				}
+				function loginShow()
+        		{
+           			 $('#llogin').modal();
+       	 		}
+				function clearall() {  
+	   				setCookie("userId", "", -1);
+			 		location.reload();
+				}  
+				function setCookie(cname, cvalue, exdays) {
+					var d = new Date();
+					d.setTime(d.getTime() + (exdays*24*60*60*1000));
+					var expires = "expires="+d.toUTCString();
+					document.cookie = cname + "=" + cvalue + "; " + expires;
+	    		}
+				function uinfo(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="user_info.html";
+					}
+				}
+				function uname1()
+       			{
+           	 		var a=checkName();
+					//var a=sender;
+            		//$("#uname").append(a);
+        		}
+				function checkName(){
+           			var username=id;
+            		if(username=="")
+           		 	{
+               		 	document.getElementById("lin").href="#";
+                		document.getElementById("lout").href="";
+                		var b="游客";
+                		return b;
+            		}
+            		else
+            		{
+                		document.getElementById("lin").href="";
+                		document.getElementById("lout").href="#";
+               		 	var c="";
+                		$.ajaxSettings.async=false;
+            			$.get(url_+"nickname?userId="+username,function(data,status){
+                		c=data;
+            		});
+            		return c;
+           			}
+       	 		}
+			</script>
+            
+            
 </body>
 </html>
-
-<!--function sendPost(){
-		var receiver=document.getElementById("receiver_name").value;
-		var theme=document.getElementById("theme").value;
-		var content=document.getElementById("content").value;
-			var res={
-				"sender":sender,
-				"receiver":receiver,
-				"content":content,
-				"theme":theme
-			};
-			result=JSON.stringify(res);
-			$.post("http://34441dba.ngrok.io/communicationMessage",result,
-			function(data,status){
-				alert("Status:\n"+status);
-			},
-			"json"
-			);
-		}-->

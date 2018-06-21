@@ -197,10 +197,6 @@ var BId;
         {
             $('#upload').modal();
         }
-	function comeback()
-		{
-			window.location="expert_info.html";
-		}
 	function parseUrl()
 		{
         	var url=location.href;
@@ -217,6 +213,10 @@ var BId;
         }
 var v = parseUrl();
 var EId = v['expertId'];
+	function comeback()
+		{
+			window.location="expert_info.html?expertId="+EId;
+		}
 	function Change()
 		{
 			var val1 = document.getElementById("introduction1").value;

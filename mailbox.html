@@ -6,87 +6,98 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<!--
-    <script type="text/javascript">
-	
-		function getCookie(c_name){
-			if(document.cookie.length>0){
-				c_start=document.cookie.indexOf(c_name+"=");
-				if(c_start!=-1){
-					c_start=c_start+c_name.length+1;
-					c_end=document.cookie.indexOf(";",c_start)
-					if(c_end==-1){
-						c_end=document.cookie.length;
-					}
-					return unescape(document.cookie.substring(c_start,c_end));
-				}
-			}
-			return "";
-		}
-		
-		function checkName(){
-			var username=getCookie("userId");
-			$.get("https://f4f255e3.ngrok.io/nickname?userId="+username,function(data,status){
-				username=data;
-			});
-			document.getElementById("oh_name").innerHTML=username;
-			alert(username);
-			return username;
-		}
-    </script>
-    -->
-    <!--
-    <script>
-		function getCookie(name){
-			var arr=document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
-			if(arr!=null){
-				return unescape(arr[2]);
-			}
-			else{
-				return null;
-			}
-		}
-		function checkName(){
-			var name=getCookie("userId");
-			alert(name);
-			return name;
-		}
-	</script>
-    -->
 </head>
 <body onLoad="ShowData()">
 	
+    <!--
+    NaiveBar Is Here:
+    Which is modified in 2017/6/21
+    -->
+    <div>
+		<nav class="navbar navbar-inverse" role="navigation">
+    		<div class="container-fluid">
+    			<div class="navbar-header" style="margin-left:20%">
+        			<a class="navbar-brand" href="#">科学专家资源共享平台</a>
+    			</div>
+    			<div style="margin-right:10%">
+       				 <ul class="nav navbar-nav navbar-left">  
+            			<li><a href="main.html">主页</a></li>
+           				<li><a href="expert_search.html">成果搜索</a></li>
+            			<li><a href="register.html">加入我们</a></li>
+            			<li><a href="#" onclick="charge()">充值</a></li>
+            			<li><a href="#" onclick="exchange()">物品换取</a></li>
+	   					<li class="active"><a href="#" onclick="mmail()">站内信</a></li>	
+        			</ul>
+        			<ul class="nav navbar-nav navbar-right">
+       					<li class="dropdown navbar-right">
+            				<a href="#" id="uname" class="dropdown-toggle" data-toggle="dropdown"> <span class="caret"></span></a>
+       		 				<ul class="dropdown-menu">
+            					<li><a href="#" id="lin" onClick="loginShow()">LOG IN</a></li>
+                				<li class="divider"></li>
+            					<li><a href="#" id="lout" onClick="clearall()">LOG OUT</a></li>
+            					<li><a href="#" id="useriii" onClick="uinfo()">个人信息</a></li>
+        					</ul>
+        				</li>
+        			</ul>
+    			</div>
+    		</div>
+		</nav>
+	</div>
+    
+    
+    
+    
+    <div class="modal fade" id="llogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="margin-top:40%">
+                <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="myModalLabel">LOGIN</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal col-md-offset-0" id="login_form">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <i class="fa fa-user fa-lg"></i>
+                                <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus maxlength="20"/>
+                            </div>
+                            <div class="form-group">
+                                    <i class="fa fa-lock fa-lg"></i>
+                                    <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+                            </div>
+                            <div class="form-group" >
+                                <font color="#999999">还没有账号？</font><a href="register.html" color="#CCCC00">前往注册</a>
+                            </div>
+                            <div class="form-group col-md-offset-9">
+                                <button id='btn' type="submit" class="btn btn-success" name="submit" onclick="doPostt()">登录</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    
+    
+    
+    
+    <!--
+    	Here is mine own
+    -->
+    
     <div class="container">
     	<div class="row">
         	<label class="label label-default" id="oh_name"></label>
         	<h2>The Letters You've Received:<span class="label label-default">-_-</span></h2>
             <button class="btn btn-default" onClick="Go()">Click here</button> 
-            <script>
-				function Go(){
-					var id=checkName();
-					window.location.href="AsSender.html?userId="+id;
-				}
-			</script>
             <p id="start">to show the letters you've written</p>
             <button class="btn btn-default" onClick="GoToWrite()">Write Letters</button>
             <script>
-				function GoToWrite(){
-					var id=checkName();
-					window.location.href="write.html?userId="+id;
-				}
-			</script>
-         	<!--
-            <div class="panel panel-default">
-            	<div class="panel-heading">
-                	<h3 class="panel-title">Title</h3>
-                 </div>
-                 <div class="panel-body">
-                 	haha,content
-                 </div>
-            </div>
-      		-->
-            <script>
-				function checkName(){
+				var url_="http://39.107.106.211:8081";
+				function check_Name(){
 					var url=location.search;
 					var theRequest=new Object();
 					if(url.indexOf('?')!=-1){
@@ -96,17 +107,26 @@
     						theRequest[ strs[ i ].split( "=" )[ 0 ] ] = ( strs[ i ].split( "=" )[ 1 ] );
  						}
 						var id=theRequest['userId'];
-						$.get("http://f09e0926.ngrok.io/nickname?userId="+id,function(data,status){
+						$.get(url_+"/nickname?userId="+id,function(data,status){
 							document.getElementById("oh_name").innerHTML=data;
+							$("#uname").append(data);
 						});
   						return theRequest['userId'];
 					}
 				}
-			</script>
-            <script>
+				var id=check_Name();
+				function Go(){
+					//var id=checkName();
+					window.location.href="mail_sender.html?userId="+id;
+				}
+				function GoToWrite(){
+					//var id=checkName();
+					window.location.href="write_mail.html?userId="+id;
+				}
 				function ShowData(){
-					var nickname=checkName();
-					$.get("http://f09e0926.ngrok.io/message/receiver?userId="+nickname,function(data,status){
+					//var nickname=checkName();
+					uname1();
+					$.get(url_+"/message/receiver?userId="+id,function(data,status){
 						var startState=document.getElementById("start");
 						if(data.length==0){
 							var sad=document.createElement("p");
@@ -131,11 +151,8 @@
 								content.innerHTML=con_tent;
 								var senddate=document.createElement("p");
 								senddate.innerHTML=send_Date;
-								//var time=document.createElement("p");
-								//time.innerHTML="";
 								div_body.appendChild(content);
 								div_body.appendChild(senddate);
-								//div_body.appendChild(time);
 								div_head.appendChild(name_h);
 								div_panel.appendChild(div_head);
 								div_panel.appendChild(div_body);
@@ -144,31 +161,114 @@
 						}
 					});
 				}
+			/*
+			the others:
+			*/
+				function getCookie(c_name){
+					if(document.cookie.length>0){
+						c_start=document.cookie.indexOf(c_name+"=")
+						if(c_start!=-1){
+							c_start=c_start+c_name.length+1
+							c_end=document.cookie.indexOf(";",c_start)
+							if(c_end==-1){
+								c_end=document.cookie.length
+							}	
+							return unescape(document.cookie.substring(c_start,c_end))
+						}
+					}
+					return "";
+				}
+				function charge(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="charge/charge.html";
+					}
+				}
+				function exchange(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="charge/exchange.html";
+					}
+				}	
+				function mmail(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="mailbox.html?userId="+id;
+					}
+				}
+				function loginShow()
+        		{
+           			 $('#llogin').modal();
+       	 		}
+				function clearall() {  
+	   				setCookie("userId", "", -1);
+			 		location.reload();
+				}  
+				function setCookie(cname, cvalue, exdays) {
+					var d = new Date();
+					d.setTime(d.getTime() + (exdays*24*60*60*1000));
+					var expires = "expires="+d.toUTCString();
+					document.cookie = cname + "=" + cvalue + "; " + expires;
+	    		}
+				function uinfo(){
+					var id="";
+					var id=getCookie("userId");
+					if(id=="")
+					{
+						alert("请先登录");
+					}
+					else
+					{
+						window.location.href="user_info.html";
+					}
+				}
+				function uname1()
+       			{
+           	 		var a=checkName();
+            		//$("#uname").append(a);
+        		}
+				function checkName(){
+           			var username=id;
+            		if(username=="")
+           		 	{
+               		 	document.getElementById("lin").href="#";
+                		document.getElementById("lout").href="";
+                		var b="游客";
+                		return b;
+            		}
+            		else
+            		{
+                		document.getElementById("lin").href="";
+                		document.getElementById("lout").href="#";
+               		 	var c="";
+                		$.ajaxSettings.async=false;
+            			$.get(url_+"nickname?userId="+username,function(data,status){
+                		c=data;
+            		});
+            		return c;
+           			}
+       	 		}
 			</script>
         </div>
     </div>
-
 </body>
 </html>
-<!--
-								var div_panel=document.createElement("div");
-								div_panel.className='panel panel-default';
-								var div_head=document.createElement("div");
-								div_head.className='panel panel-heading';
-								var name_h=document.createElement("h3");
-								name_h.className='panel_title';
-								name_h.innerHTML=data[i]['sender']['nickname'];
-								var div_body=document.createElement("div");
-								div_body.className='panel panel-body';
-								var content=document.createElement("p");
-								content.innerHTML=data[i]['content'];
-								//var time=document.createElement("p");
-								//time.innerHTML="";
-								div_body.appendChild(content);
-								//div_body.appendChild(time);
-								div_head.appendChild(name_h);
-								div_panel.appendChild(div_head);
-								div_panel.appendChild(div_body);
-								startState.appendChild(div_panel);
-                                -->
                                 
