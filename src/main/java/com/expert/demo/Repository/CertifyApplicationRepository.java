@@ -6,8 +6,10 @@ import com.expert.demo.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface CertifyApplicationRepository extends JpaRepository<CertifyApplication,Integer> {
-   public CertifyApplication findByUser(User user);
+   public List<CertifyApplication> findByUser(User user);
 
    public CertifyApplication findByApplyId(int appid);
 

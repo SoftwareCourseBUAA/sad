@@ -10,5 +10,7 @@ spring:
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  resources:
+    static-locations: file:C:/upload
 server:
   port: 8081

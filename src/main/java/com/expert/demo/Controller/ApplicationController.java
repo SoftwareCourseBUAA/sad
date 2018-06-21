@@ -173,15 +173,18 @@ public class ApplicationController {
             ,@PathVariable("userId") int userId)
     {
 
-        String url=upload(multipartFile,"evidence/"+userId);
+        String url=upload(multipartFile,"upload/evidence/"+"certifiy"+userId);
+        String downloadUrl="evidence/"+"certify"+userId+url;
         if(url==null)
             return false;
         else
         {
            User user=userRepository.findByUserId(userId);
            if(user!=null) {
-               CertifyApplication certifyApplication =certifyApplicationRepository.findByUser(user);
-               certifyApplication.setDownloadUrl(url);
+
+               List<CertifyApplication> certifyApplicationList=certifyApplicationRepository.findByUser(user);
+               CertifyApplication certifyApplication = certifyApplicationList.get(certifyApplicationList.size()-1);
+               certifyApplication.setDownloadUrl("http://39.107.106.211:8081/"+downloadUrl);
                certifyApplicationRepository.save(certifyApplication);
                return true;
            }
@@ -198,18 +201,20 @@ public class ApplicationController {
         MultipartFile file;
         BufferedOutputStream stream;
         String downloadUrl="";
+        System.out.println();
         for (int i =0; i< files.size(); ++i) {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
-                    String pathName="evidence/"+expertId +file.getOriginalFilename();
+                    String pathName="upload/evidence/"+userId +file.getOriginalFilename();
                     File saveFile=new File(pathName);
                     stream = new BufferedOutputStream(new FileOutputStream(saveFile));
                     stream.write(bytes);
                     stream.flush();
                     stream.close();
-                    downloadUrl+=saveFile.getAbsolutePath()+";";
+                    downloadUrl+="http://39.107.106.211:8081/"+"evidence/"+"match"+userId
+                            +file.getOriginalFilename()+";";
                 } catch (Exception e) {
                     return "上传失败";
                 }
@@ -246,7 +251,8 @@ public class ApplicationController {
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
-                downloadUrl=saveFile.getAbsolutePath();
+                downloadUrl=saveFileName;
+
             } catch (FileNotFoundException e) {
                 return null;
             } catch (IOException e) {

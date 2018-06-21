@@ -110,7 +110,7 @@ public class AchievementController
             return false;
         if (!file.isEmpty()) {
             String saveFileName = file.getOriginalFilename();
-            String pathName = "upload/" + saveFileName;
+            String pathName = "upload/achievement" + saveFileName;
             File saveFile = new File(pathName);
             if (!saveFile.getParentFile().exists()) {
                 saveFile.getParentFile().mkdirs();
@@ -121,6 +121,7 @@ public class AchievementController
                 out.flush();
                 out.close();
                 String savePath=saveFile.getAbsolutePath();
+                String downloadUrl="http://39.107.106.211:8081/"+"achievement/"+saveFileName;
                 Achievement achievement=achievementRepository.findAchievementByAchievementId(achievementId);
                 achievement.setDownloadUrl(savePath);
                 achievementRepository.save(achievement);
