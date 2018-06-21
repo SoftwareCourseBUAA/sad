@@ -14,14 +14,17 @@
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- MetisMenu CSS -->
+    <!-- DataTables CSS -->
+    <link href="../css/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../css/dataTables.responsive.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
 
-
     <!-- Custom Fonts -->
-    <link href="../css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -318,15 +321,38 @@
         var isMatch=true;
         var currentId=-1;
 
+        function getCookie(c_name){
+            if(document.cookie.length>0){
+                c_start=document.cookie.indexOf(c_name+"=")
+                if(c_start!=-1){
+                    c_start=c_start+c_name.length+1
+                    c_end=document.cookie.indexOf(";",c_start)
+                    if(c_end==-1){
+                        c_end=document.cookie.length
+                    }
+                    return unescape(document.cookie.substring(c_start,c_end))
+                }
+            }
+            return "";
+        }
+
+        function check(){
+            var id=getCookie("userId");
+            if(id=="")
+            {
+                //alert("请先登录");
+                window.location.href="login.html";
+            }
+        }
+
         window.onload=function(){
             //alert("aaa");
+            check();
             getExpertsCount();
             getApplyCount();
             getPaperCount();
             getMatchApply();
             getCeritfyApply();
-            getAllExperts();
-
             var table=$('#dataTables-example').DataTable({
                 searching: false,
                 dom: 'Bfrtip',
@@ -336,6 +362,11 @@
                 info:false
                 
             });
+
+            
+            getAllExperts();
+
+            
         }
 
         function getExpertsCount()
@@ -360,32 +391,17 @@
             var count=0;
             $.get(url+"admin/matchcount",function(data)
             {
-                if(data==0)
-                {
-                    alert("获取申请数量错误");
-                }
-                else
-                {
+
                     //alert(data);
                     count=count+data;
-                }
+                
             }); 
             $.get(url+"admin/certifycount",function(data)
             {
-                //alert(count);
-
-                if(data==0)
-                {
-                    alert("获取申请数量错误");
-                }
-                else
-                {
-                    //alert(data+"条未处理请求！");
-
-                    count=count+data;
-                    alert(data+"条未处理请求！");
-                    document.getElementById("apply_count").innerHTML=count;
-                }
+                count=count+data;
+                alert(data+"条未处理请求！");
+                document.getElementById("apply_count").innerHTML=count;
+                
             }); 
         }
 
@@ -409,27 +425,18 @@
         function getMatchApply(){
             $.get(url+"admin/matchapply",function(data)
             {
-                //alert(data);
-                if(data==0)
+                var parent = document.getElementById("applylist");
+                matchdata=data;
+                for(var i=0;i<data.length;i++)
                 {
-                    alert("获取match申请错误");
-                }
-                else
-                {
-                    //alert(data);
-                    var parent = document.getElementById("applylist");
-                    matchdata=data;
-                    for(var i=0;i<data.length;i++)
-                    {
-                        var newbar=document.createElement("a");
-                        newbar.setAttribute("id","matchapply"+data[i].applyId);
-                        newbar.setAttribute("class","list-group-item");
-                        newbar.setAttribute("onClick","matchApplyShow("+i+")");
+                    var newbar=document.createElement("a");
+                    newbar.setAttribute("id","matchapply"+data[i].applyId);
+                    newbar.setAttribute("class","list-group-item");
+                    newbar.setAttribute("onClick","matchApplyShow("+i+")");
 
-                        var s="认领请求，来自"+data[i].user.nickname;
-                        newbar.append(s);
-                        parent.appendChild(newbar);
-                    }
+                    var s="认领请求，来自"+data[i].user.nickname;
+                    newbar.append(s);
+                    parent.appendChild(newbar);
                 }
             }); 
         }
@@ -437,27 +444,20 @@
         function getCeritfyApply(){
             $.get(url+"admin/certifyapply",function(data)
             {
-                //alert(data);
-                if(data==0)
-                {
-                    alert("获取match申请错误");
-                }
-                else
-                {
-                    //alert(data);
-                    var parent = document.getElementById("applylist");
-                    certifydata=data;
-                    for(var i=0;i<data.length;i++)
-                    {
-                        var newbar=document.createElement("a");
-                        newbar.setAttribute("id","certifyapply"+data[i].applyId);
-                        newbar.setAttribute("class","list-group-item");
-                        newbar.setAttribute("onClick","certifyApplyShow("+i+")");
 
-                        var s="认证请求，来自"+data[i].user.nickname;
-                        newbar.append(s);
-                        parent.appendChild(newbar);
-                    }
+                    //alert(data);
+                var parent = document.getElementById("applylist");
+                certifydata=data;
+                for(var i=0;i<data.length;i++)
+                {
+                    var newbar=document.createElement("a");
+                    newbar.setAttribute("id","certifyapply"+data[i].applyId);
+                    newbar.setAttribute("class","list-group-item");
+                    newbar.setAttribute("onClick","certifyApplyShow("+i+")");
+
+                    var s="认证请求，来自"+data[i].user.nickname;
+                    newbar.append(s);
+                    parent.appendChild(newbar);
                 }
             }); 
         }
@@ -531,9 +531,9 @@
         }
 
         function getAllExperts(){
-        var table = $('#dataTables-example');
-        $.get(url+"expert/all?page="+0+"&size="+1000,function(data){
-            for(var i=0;i<1000;i++)
+        var table = $('#dataTables-example').DataTable();
+        $.get(url+"expert/all?page="+0+"&size="+100,function(data){
+            for(var i=0;i<100;i++)
             {
                 var eid=data[i].expertid;
                 var name=data[i].name;

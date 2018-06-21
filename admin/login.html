@@ -53,7 +53,7 @@
                                     </label>
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <a href="index.html" class="btn btn-lg btn-success btn-block" name="submit" onclick="doPost()">登陆</a>
+                                <a class="btn btn-lg btn-success btn-block" name="submit" onclick="doPost()">登陆</a>
                             </fieldset>
                         </form>
                     </div>
@@ -73,7 +73,7 @@
     <script src="../js/sb-admin-2.js"></script>
 
     <script type="text/javascript">
-        var url="http://f09e0926.ngrok.io/";
+        var url="http://39.107.106.211:8081/";
         function doPost()
         {
             //alert("qqq");
@@ -92,11 +92,27 @@
                 else
                 {
                     
-                    alert("登陆成功！");
-                    document.cookie="userId"+data;
-                    window.location.href="pages/index.html"
+                    //alert(data);
+                    document.cookie="userId="+data;
+                    //alert(getCookie("userId"));
+                    window.location.href="index.html"
                 }
             }); 
+        }
+
+        function getCookie(c_name){
+            if(document.cookie.length>0){
+                c_start=document.cookie.indexOf(c_name+"=")
+                if(c_start!=-1){
+                    c_start=c_start+c_name.length+1
+                    c_end=document.cookie.indexOf(";",c_start)
+                    if(c_end==-1){
+                        c_end=document.cookie.length
+                    }
+                    return unescape(document.cookie.substring(c_start,c_end))
+                }
+            }
+            return "";
         }
     </script>
 
