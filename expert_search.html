@@ -395,7 +395,7 @@
 					var dn=data[i].name;
 					var df=data[i].field;
 					var dp=data[i].patent;
-					var dl=data[i].paperList[0].title;
+					if(data[i].paperList[0])var dl=data[i].paperList[0].title;
 					if(!dn)dn="未填写";
 					if(!df)df="未填写";
 					if(!dp)dp="未填写";
